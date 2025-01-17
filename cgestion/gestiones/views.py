@@ -1,3 +1,8 @@
 from django.shortcuts import render
 
-# Create your views here.
+def creargestion(request):
+    return render(request, 'index.html')  # El nombre de la plantilla debe ir entre comillas
+
+
+def inicio(request):
+    return render(request, 'index.html')
