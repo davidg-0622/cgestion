@@ -22,6 +22,7 @@ from gestiones import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', views.inicio, name='inicio'),  # Ruta para la raíz
-    path('creargestion/', views.creargestion, name='creargestion'),
-   
+    path('creargestion/', views.creargestion, name='creargestion'), 
+    path('editar_gestion/', views.editar_gestion, name='editar_gestion'),
+    
 ]

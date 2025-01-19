@@ -6,3 +6,7 @@ def creargestion(request):
 
 def inicio(request):
     return render(request, 'index.html')
+
+
+def editar_gestion(request):
+    return render(request, 'editar_gestion.html')
