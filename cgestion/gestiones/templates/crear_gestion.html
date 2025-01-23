@@ -5,28 +5,28 @@
 {% block content %}
 <div class="container-fluid d-flex flex-column align-items-center" style="min-height: 100vh; padding: 50px 15px; overflow-y: auto;">
   <div class="card shadow p-4" style="max-width: 800px; width: 100%;">
-    <h2 class="mb-4 text-center text-primary">Editar Gestión</h2>
+    <h2 class="mb-4 text-center text-primary">Crear Gestión</h2>
 
     <form method="post" novalidate>
       {% csrf_token %}
 
       <!-- Servicio -->
       <div class="mb-3">
-        <label for="servicio" class="form-label"><strong>Servicio</strong></label>
+        <label for="servicio" class="form-label">Servicio</label>
         <input type="text" class="form-control" id="servicio" name="servicio" placeholder="Ingrese el servicio" required>
         <div class="invalid-feedback">Por favor, ingrese el servicio.</div>
       </div>
 
       <!-- Tipo de Gestión -->
       <div class="mb-3">
-        <label for="tipoGestion" class="form-label"> <strong>Tipo de Gestión</strong></label>
+        <label for="tipoGestion" class="form-label">Tipo de Gestión</label>
         <input type="text" class="form-control" id="tipoGestion" name="tipoGestion" placeholder="Ingrese el tipo de gestión" required>
         <div class="invalid-feedback">Por favor, ingrese el tipo de gestión.</div>
       </div>
 
       <!-- Número de Caso -->
       <div class="mb-3">
-        <label for="numeroCaso" class="form-label"><strong>Número de Caso</strong></label>
+        <label for="numeroCaso" class="form-label">Número de Caso</label>
         <input type="number" class="form-control" id="numeroCaso" name="numeroCaso" placeholder="Ingrese el número de caso" required>
         <div class="invalid-feedback">Por favor, ingrese el número de caso.</div>
       </div>

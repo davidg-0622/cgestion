@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+<title>{% block title %}Gestiones{% endblock %}</title>
+
+{% block content %}
+
+<!-- Tabla mejorada con bordes claros y separación de celdas -->
+
+<a href="/creargestion" class="btn btn-success mt-5 mx-5">+ Crear Gestion</a>
+
+
+<div class="table-responsive mt-5">
+  <table class="table table-striped table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">Número Caso</th>
+        <th scope="col">Detalle</th>
+        <th scope="col">Solución</th>
+        <th scope="col">Servicio</th>
+        <th scope="col">Responsables</th>
+        <th scope="col">Fecha y Hora Inicial</th>
+        <th scope="col">Fecha y Hora Final</th>
+        <th scope="col">AMG</th>
+        <th scope="col">GIOTI</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Fila de ejemplo -->
+      <tr>
+        <td>12345</td>
+        <td>Detalle del caso</td>
+        <td>Solución aplicada</td>
+        <td>Servicio A</td>
+        <td>Juan Pérez, Ana Gómez</td>
+        <td>2025-01-22 10:00</td>
+        <td>2025-01-22 12:00</td>
+        <td><span class="badge bg-success">Sí</span></td>
+        <td><span class="badge bg-danger">No</span></td>
+      </tr>
+      <!-- Más filas de ejemplo -->
+      <tr>
+        <td>67890</td>
+        <td>Otro detalle</td>
+        <td>Otra solución</td>
+        <td>Servicio B</td>
+        <td>Carlos López, María Pérez</td>
+        <td>2025-01-23 14:00</td>
+        <td>2025-01-23 16:00</td>
+        <td><span class="badge bg-danger">No</span></td>
+        <td><span class="badge bg-success">Sí</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Incluir los archivos de JS para funcionalidades de Bootstrap (opcional para tooltips) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}
