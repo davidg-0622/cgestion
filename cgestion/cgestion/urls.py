@@ -24,6 +24,7 @@ urlpatterns = [
     path('', views.inicio, name='inicio'),  # Ruta para la raíz
     path('creargestion/', views.creargestion, name='creargestion'), 
     path('editar_gestion/', views.editar_gestion, name='editar_gestion'),
+    path('listar_gestiones/', views.listar_gestiones, name='listar_gestiones'), 
 
     
 ]
