@@ -1,8 +1,12 @@
 {% extends "layout.html" %}
 
-{% block title %}Editar Gestión{% endblock %}
+{% block title %}Crear nueva gestión{% endblock %}
+
+
 
 {% block content %}
+
+
 <div class="container-fluid d-flex flex-column align-items-center" style="min-height: 100vh; padding: 50px 15px; overflow-y: auto;">
   <div class="card shadow p-4" style="max-width: 800px; width: 100%;">
     <h2 class="mb-4 text-center text-primary">Crear Gestión</h2>
@@ -17,12 +21,18 @@
         <div class="invalid-feedback">Por favor, ingrese el servicio.</div>
       </div>
 
-      <!-- Tipo de Gestión -->
-      <div class="mb-3">
-        <label for="tipo_de_gestion" class="form-label">Tipo de Gestión</label>
-        <input type="text" class="form-control" id="tipo_de_gestion" name="tipo_de_gestion" placeholder="Ingrese el tipo de gestión">
-        <div class="invalid-feedback">Por favor, ingrese el tipo de gestión.</div>
-      </div>
+<!-- Tipo de Gestión -->
+<div class="mb-3">
+  <label for="tipo_de_gestion" class="form-label">Tipo de Gestión</label>
+  <select class="form-select" id="tipo_de_gestion" name="tipo_de_gestion" required>
+    <option value="" disabled selected>Seleccione el tipo de gestión</option>
+    <option value="Evento">Evento</option>
+    <option value="Incidente">Incidente</option>
+    <option value="Orden de cambio">Orden de cambio</option>
+  </select>
+  <div class="invalid-feedback">Por favor, seleccione un tipo de gestión.</div>
+</div>
+
 
       <!-- Número de Caso -->
       <div class="mb-3">
@@ -31,12 +41,22 @@
         <div class="invalid-feedback">Por favor, ingrese el número de caso.</div>
       </div>
 
-      <!-- Detectada Por -->
-      <div class="mb-3">
-        <label for="detectada_por" class="form-label">Detectada Por</label>
-        <input type="text" class="form-control" id="detectada_por" name="detectada_por" placeholder="¿Quién la detectó?" required>
-        <div class="invalid-feedback">Por favor, ingrese quién detectó el problema.</div>
-      </div>
+<!-- Detectada Por -->
+<div class="mb-3">
+  <label for="detectada_por" class="form-label">Detectada Por</label>
+  <select class="form-select" id="detectada_por" name="detectada_por" required>
+    <option value="">Seleccione quién detectó el problema</option>
+    <option value="Herramientas de monitoreo">Herramientas de monitoreo</option>
+    <option value="Analista de confiabilidad">Analista de confiabilidad</option>
+    <option value="Analista de soporte/Stand by">Analista de soporte/Stand by</option>
+    <option value="Torre de control">Torre de control</option>
+    <option value="Pruebas manuales CGM">Pruebas manuales CGM</option>
+    <option value="Proveedor/aliado">Proveedor/aliado</option>
+    <option value="Otros">Otros</option>
+  </select>
+  <div class="invalid-feedback">Por favor, seleccione quién detectó el problema.</div>
+</div>
+
 
      <!-- Causado por certificado digital -->
 <div class="mb-3">
@@ -58,20 +78,40 @@
   <div class="invalid-feedback">Por favor, indique si el incidente fue generado por OC.</div>
 </div>
 
+<!-- Atribuible a -->
+<div class="mb-3">
+  <label for="atribuible_a" class="form-label">Atribuible a</label>
+  <select class="form-select" id="atribuible_a" name="atribuible_a" required>
+    <option value="" disabled selected>Seleccione a quién es atribuible</option>
+    <option value="EVC">EVC</option>
+    <option value="Cloud">Cloud</option>
+    <option value="Base de datos">Base de datos</option>
+    <option value="ISERIES">ISERIES</option>
+    <option value="Ciberseguridad">Ciberseguridad</option>
+    <option value="Plataformas distribuidas">Plataformas distribuidas</option>
+    <option value="Telecomunicaciones">Telecomunicaciones</option>
+    <option value="Integracion">Integración</option>
+    <option value="SOA">SOA</option>
+    <option value="Pseries">Pseries</option>
+    <option value="Usuarios">Usuarios</option>
+    <option value="Aliados">Aliados</option>
+    <option value="Sin definir">Sin definir</option>
+  </select>
+  <div class="invalid-feedback">Por favor, seleccione a quién es atribuible.</div>
+</div>
 
-      <!-- Atribuible a -->
-      <div class="mb-3">
-        <label for="atribuible_a" class="form-label">Atribuible a</label>
-        <input type="text" class="form-control" id="atribuible_a" name="atribuible_a" placeholder="Atribuible a" required>
-        <div class="invalid-feedback">Por favor, ingrese a quién es atribuible.</div>
-      </div>
 
-      <!-- Tipo de Falla -->
-      <div class="mb-3">
-        <label for="tipo_de_falla" class="form-label">Tipo de Falla</label>
-        <input type="text" class="form-control" id="tipo_de_falla" name="tipo_de_falla" placeholder="Ingrese el tipo de falla" required>
-        <div class="invalid-feedback">Por favor, ingrese el tipo de falla.</div>
-      </div>
+<!-- Tipo de Falla -->
+<div class="mb-3">
+  <label for="tipo_de_falla" class="form-label">Tipo de Falla</label>
+  <select class="form-select" id="tipo_de_falla" name="tipo_de_falla" required>
+    <option value="" disabled selected>Seleccione el tipo de falla</option>
+    <option value="Parcial">Parcial</option>
+    <option value="Total">Total</option>
+  </select>
+  <div class="invalid-feedback">Por favor, seleccione el tipo de falla.</div>
+</div>
+
 
       <!-- Detalle -->
       <div class="mb-3">
@@ -80,12 +120,18 @@
         <div class="invalid-feedback">Por favor, describa el detalle.</div>
       </div>
 
-      <!-- Tipo Causa -->
-      <div class="mb-3">
-        <label for="tipo_causa" class="form-label">Tipo Causa</label>
-        <input type="text" class="form-control" id="tipo_causa" name="tipo_causa" placeholder="Ingrese el tipo de causa" required>
-        <div class="invalid-feedback">Por favor, ingrese el tipo de causa.</div>
-      </div>
+   <!-- Tipo Causa -->
+<div class="mb-3">
+  <label for="tipo_causa" class="form-label">Tipo Causa</label>
+  <select class="form-select" id="tipo_causa" name="tipo_causa" required>
+    <option value="" disabled selected>Seleccione el tipo de causa</option>
+    <option value="En investigacion">En investigación</option>
+    <option value="Encontrado">Encontrado</option>
+    <option value="No encontrado">No encontrado</option>
+  </select>
+  <div class="invalid-feedback">Por favor, seleccione el tipo de causa.</div>
+</div>
+
 
       <!-- Causa -->
       <div class="mb-3">

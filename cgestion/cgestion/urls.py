@@ -21,10 +21,7 @@ from gestiones import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', views.inicio, name='inicio'),  # Ruta para la raíz
+    path('', views.listar_gestiones, name='listar_gestiones'),  # Ruta para la raíz
     path('creargestion/', views.creargestion, name='creargestion'), 
-    path('editar_gestion/', views.editar_gestion, name='editar_gestion'),
-    path('listar_gestiones/', views.listar_gestiones, name='listar_gestiones'), 
-
-    
+    path('creargestion/editar_gestion/<int:id>/', views.editar_gestion, name='editar_gestion'),  # Agregar barra al final
 ]
