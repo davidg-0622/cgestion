@@ -1,12 +1,18 @@
 from django.shortcuts import render, get_object_or_404
 
 from gestiones.models import Gestion, Servicio
+from django.contrib.auth.forms import UserCreationForm
+from gestiones.forms import RegisterForm
+
+
 
 ############################## Crear gestion #######################################
 
 from django.shortcuts import render, redirect
 from gestiones.models import Gestion
 from django.core.paginator import Paginator
+from django.contrib import messages
+from django.shortcuts import render
 
 def creargestion(request):
     if request.method == "POST":
@@ -52,6 +58,8 @@ def creargestion(request):
             gioti=gioti,
         )
         gestion.save()
+        messages.success(request, f'Se ha creado correctamente la gestión con el incidente {gestion.numero_caso} y el servicio {gestion.servicio}.')
+
         return redirect("/")  # Redirigir a una página de listado o detalle
 
     return render(request, "crear_gestion.html")
@@ -65,8 +73,6 @@ def creargestion(request):
 from django.db.models import Q
 
 
-
-from django.db.models import Q
 
 def listar_gestiones(request):
     # Obtener el término de búsqueda desde los parámetros GET
@@ -106,7 +112,7 @@ def listar_gestiones(request):
 
 
 
-############################# editar gestion ###########################################
+############################# Editar gestion ###########################################
 
 def editar_gestion(request, id):
     # Obtiene la instancia de la gestión a editar
@@ -156,6 +162,13 @@ def editar_gestion(request, id):
         # Guarda los cambios en la base de datos
         gestion.save()
         
+        #Crear mensaje flas (sesion que solo se muestra una vez)
+        # Crear mensaje flash (sesión que solo se muestra una vez)
+        # Crear mensaje flash (sesión que solo se muestra una vez)
+        messages.success(request, f'Se ha editado correctamente la gestión con el incidente {gestion.numero_caso} y el servicio {gestion.servicio}.')
+
+
+        
         # Redirige a la página de gestiones
         return redirect('listar_gestiones')  # Asume que 'listar_gestiones' es el nombre de la URL de gestiones.html
 
@@ -167,10 +180,49 @@ def editar_gestion(request, id):
 
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
+
+def register_page(request):
+    # Crea el formulario de registro
+    register_form = RegisterForm()
+    
+    if request.method == "POST":
+        register_form = RegisterForm(request.POST)
+        
+        if register_form.is_valid():
+            register_form.save()
+            # Redirigir a la página de gestión o la URL correcta
+            return redirect('login')  # Asegúrate de que 'listar_gestiones' sea el nombre de la URL definida en tus urls.py
+    
+    return render(request, 'users/register.html', {'register_form': register_form})
+
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+
+def login_page(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        # Autenticación del usuario
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            return redirect('listar_gestiones')  # Redirige al usuario después de iniciar sesión
+        else:
+            messages.error(request, 'Credenciales incorrectas. Inténtalo nuevamente.')
+    
+    return render(request, 'users/login.html', {'title': 'Login'})
+
+
 
 def inicio(request):
     return render(request, 'gestiones.html')
-
-
 
 

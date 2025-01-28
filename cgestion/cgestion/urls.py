@@ -23,5 +23,13 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('', views.listar_gestiones, name='listar_gestiones'),  # Ruta para la raíz
     path('creargestion/', views.creargestion, name='creargestion'), 
-    path('creargestion/editar_gestion/<int:id>/', views.editar_gestion, name='editar_gestion'),  # Agregar barra al final
+    path('creargestion/editar_gestion/<int:id>/', views.editar_gestion, name='editar_gestion'),  
+    path('registro_usuario/', views.register_page, name='registro_usuario'), 
+    path('login/', views.login_page, name='login'), 
 ]
+
+
+
+
+
+

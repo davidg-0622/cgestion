@@ -7,6 +7,7 @@
 {% block content %}
 
 
+
 <div class="container-fluid d-flex flex-column align-items-center" style="min-height: 100vh; padding: 50px 15px; overflow-y: auto;">
   <div class="card shadow p-4" style="max-width: 800px; width: 100%;">
     <h2 class="mb-4 text-center text-danger">Editar Gestión</h2>
@@ -16,14 +17,14 @@
 
       <!-- Servicio -->
       <div class="mb-3">
-        <label for="servicio" class="form-label">Servicio</label>
-        <input type="text" class="form-control" id="servicio" name="servicio" value="{{ gestion.servicio }}" placeholder="Ingrese el servicio" required>
+        <label for="servicio" class="form-label"><strong>Servicio</strong></label>
+        <input type="text" class="form-control" id="servicio" name="servicio" value="{{ gestion.servicio }}" placeholder="Ingrese el servicio" >
         <div class="invalid-feedback">Por favor, ingrese el servicio.</div>
       </div>
 
 <!-- Tipo de Gestión -->
 <div class="mb-3">
-  <label for="tipo_de_gestion" class="form-label">Tipo de Gestión</label>
+  <label for="tipo_de_gestion" class="form-label"><strong>Tipo de Gestión</strong></label>
   <select class="form-select" id="tipo_de_gestion" name="tipo_de_gestion" required>
     <option value="" disabled selected>Seleccione el tipo de gestión</option>
     <option value="Evento" value="Evento" {% if gestion.tipo_de_gestion == 'Evento' %}selected{% endif %}>Evento</option>
@@ -36,15 +37,15 @@
 
       <!-- Número de Caso -->
       <div class="mb-3">
-        <label for="numero_caso" class="form-label">Número de Caso</label>
-        <input type="text" class="form-control" id="numero_caso" name="numero_caso"  placeholder="Ingrese el número de caso"  value="{{ gestion.numero_caso }}" required>
+        <label for="numero_caso" class="form-label"><strong>Número de Caso</strong></label>
+        <input type="text" class="form-control" id="numero_caso" name="numero_caso"  placeholder="Ingrese el número de caso"  value="{{ gestion.numero_caso }}" >
         <div class="invalid-feedback">Por favor, ingrese el número de caso.</div>
       </div>
 
 
 <!-- Detectada Por -->
 <div class="mb-3">
-  <label for="detectada_por" class="form-label">Detectada Por</label>
+  <label for="detectada_por" class="form-label"><strong>Detectada Por</strong></label>
   <select class="form-select" id="detectada_por" name="detectada_por" required>
     <option value="">Seleccione quién detectó el problema</option>
     <option value="Herramientas de monitoreo" {% if gestion.detectada_por == 'Herramientas de monitoreo' %}selected{% endif %}>Herramientas de monitoreo</option>
@@ -62,7 +63,7 @@
 
      <!-- Causado por certificado digital -->
 <div class="mb-3">
-  <label class="form-label">Causado por certificado digital</label>
+  <label class="form-label"><strong>Causado por certificado digital</strong></label>
   <div>
     <input type="checkbox" id="causado_por_certificado_digital" name="causado_por_certificado_digital" {% if gestion.causado_por_certificado_digital %} checked {% endif %} {% if causadoporc == "on" %} checked {% endif %}>
     <label for="causado_por_certificado_digital">Sí</label>
@@ -72,7 +73,7 @@
 
 <!-- Incidente Generado por OC -->
 <div class="mb-3">
-  <label class="form-label">Incidente Generado por OC</label>
+  <label class="form-label"><strong>Incidente Generado por OC</strong></label>
   <div>
     <input type="checkbox" id="incidente_generado_por_OC" name="incidente_generado_por_OC" {% if gestion.incidente_generado_por_OC %} checked {% endif %} {% if generadoporc == "on" %} checked {% endif %}>
     <label for="incidente_generado_por_OC">Sí</label>
@@ -82,7 +83,7 @@
 
 <!-- Atribuible a -->
 <div class="mb-3">
-  <label for="atribuible_a" class="form-label">Atribuible a</label>
+  <label for="atribuible_a" class="form-label"><strong>Atribuible a</strong></label>
   <select class="form-select" id="atribuible_a" name="atribuible_a" required>
     <option value="" disabled selected>Seleccione a quién es atribuible</option>
     <option value="EVC" {% if gestion.atribuible_a == 'EVC' %}selected{% endif %}>EVC</option>
@@ -106,7 +107,7 @@
 
 <!-- Tipo de Falla -->
 <div class="mb-3">
-  <label for="tipo_de_falla" class="form-label">Tipo de Falla</label>
+  <label for="tipo_de_falla" class="form-label"><strong>Tipo de Falla</strong></label>
   <select class="form-select" id="tipo_de_falla" name="tipo_de_falla" required>
     <option value="" disabled selected>Seleccione el tipo de falla</option>
     <option value="Parcial" {% if gestion.tipo_de_falla == 'Parcial' %}selected{% endif %}>Parcial</option>
@@ -119,16 +120,16 @@
 
 <!-- Detalle -->
 <div class="mb-3">
-  <label for="detalle" class="form-label">Detalle</label>
-  <textarea class="form-control" id="detalle" name="detalle" rows="3" placeholder="Describa el detalle" required>{{ gestion.detalle }}</textarea>
+  <label for="detalle" class="form-label"><strong>Detalle</strong></label>
+  <textarea class="form-control" id="detalle" name="detalle" rows="3" placeholder="Describa el detalle" >{{ gestion.detalle }}</textarea>
   <div class="invalid-feedback">Por favor, ingrese el detalle.</div>
 </div>
 
 
 <!-- Tipo Causa -->
 <div class="mb-3">
-  <label for="tipo_causa" class="form-label">Tipo Causa</label>
-  <select class="form-select" id="tipo_causa" name="tipo_causa" required>
+  <label for="tipo_causa" class="form-label"><strong>Tipo Causa</strong></label>
+  <select class="form-select" id="tipo_causa" name="tipo_causa" >
     <option value="" disabled selected>Seleccione el tipo de causa</option>
     <option value="En investigacion" {% if gestion.tipo_causa == 'En investigacion' %}selected{% endif %}>En investigación</option>
     <option value="Encontrado" {% if gestion.tipo_causa == 'Encontrado' %}selected{% endif %}>Encontrado</option>
@@ -141,7 +142,7 @@
 
 <!-- Causa -->
 <div class="mb-3">
-  <label for="causa" class="form-label">Causa</label>
+  <label for="causa" class="form-label"><strong>Causa</strong></label>
   <textarea class="form-control" id="causa" name="causa" rows="3" placeholder="Describa la causa" required>{{ gestion.causa }}</textarea>
   <div class="invalid-feedback">Por favor, describa la causa.</div>
 </div>
@@ -149,7 +150,7 @@
 
 <!-- Validaciones -->
 <div class="mb-3">
-  <label for="validaciones" class="form-label">Validaciones</label>
+  <label for="validaciones" class="form-label"><strong>Validaciones</strong></label>
   <textarea class="form-control" id="validaciones" name="validaciones" rows="3" placeholder="Ingrese las validaciones" required>{{ gestion.validaciones }}</textarea>
   <div class="invalid-feedback">Por favor, ingrese las validaciones.</div>
 </div>
@@ -157,35 +158,35 @@
 
 <!-- Solución -->
 <div class="mb-3">
-  <label for="solucion" class="form-label">Solución</label>
-  <textarea class="form-control" id="solucion" name="solucion" rows="3" placeholder="Ingrese la solución" required>{{ gestion.solucion }}</textarea>
+  <label for="solucion" class="form-label"><strong>Solución</strong></label>
+  <textarea class="form-control" id="solucion" name="solucion" rows="3" placeholder="Ingrese la solución" >{{ gestion.solucion }}</textarea>
   <div class="invalid-feedback">Por favor, ingrese la solución.</div>
 </div>
 
     <!-- Responsable GIOTI -->
 <div class="mb-3">
-  <label for="responsable_gioti" class="form-label">Responsable GIOTI</label>
-  <input type="text" class="form-control" id="responsable_gioti" name="responsable_gioti" value="{{ gestion.responsable_gioti }}" placeholder="Ingrese el responsable GIOTI" required>
+  <label for="responsable_gioti" class="form-label"><strong>Responsable GIOTI</strong></label>
+  <input type="text" class="form-control" id="responsable_gioti" name="responsable_gioti" value="{{ gestion.responsable_gioti }}" placeholder="Ingrese el responsable GIOTI" >
   <div class="invalid-feedback">Por favor, ingrese el responsable GIOTI.</div>
 </div>
 
 <!-- Fecha y Hora Inicial -->
 <div class="mb-3">
-  <label for="fecha_hora_inicial" class="form-label">Fecha y Hora Inicial</label>
-  <input type="datetime-local" class="form-control" id="fecha_hora_inicial" name="fecha_hora_inicial" value="{{ gestion.fecha_hora_inicial|date:'Y-m-d\TH:i' }}" required>
+  <label for="fecha_hora_inicial" class="form-label"><strong>Fecha y Hora Inicial</strong></label>
+  <input type="datetime-local" class="form-control" id="fecha_hora_inicial" name="fecha_hora_inicial" value="{{ gestion.fecha_hora_inicial|date:'Y-m-d\TH:i' }}" >
   <div class="invalid-feedback">Por favor, ingrese la fecha y hora inicial.</div>
 </div>
 
 <!-- Fecha y Hora Final -->
 <div class="mb-3">
-  <label for="fecha_hora_final" class="form-label">Fecha y Hora Final</label>
-  <input type="datetime-local" class="form-control" id="fecha_hora_final" name="fecha_hora_final" value="{{ gestion.fecha_hora_final|date:'Y-m-d\TH:i' }}" required>
+  <label for="fecha_hora_final" class="form-label"><strong>Fecha y Hora Final</strong></label>
+  <input type="datetime-local" class="form-control" id="fecha_hora_final" name="fecha_hora_final" value="{{ gestion.fecha_hora_final|date:'Y-m-d\TH:i' }}" >
   <div class="invalid-feedback">Por favor, ingrese la fecha y hora final.</div>
 </div>
 
   <!-- Checkbox Postular AMG -->
   <div class="mb-3">
-    <label class="form-label">Postular AMG</label>
+    <label class="form-label"><strong>Postular AMG</strong></label>
     <div>
       <input type="checkbox" id="postular_amg" name="postular_amg" {% if gestion.postular_amg %} checked {% endif %}>
       <label for="postular_amg">Sí</label>
@@ -194,7 +195,7 @@
 
 <!-- Checkbox GIOTI -->
 <div class="mb-3">
-  <label class="form-label">GIOTI</label>
+  <label class="form-label"><strong>GIOTI</strong></label>
   <div>
     <input type="checkbox" id="gioti" name="gioti" {% if gestion.gioti %} checked {% endif %}>
     <label for="gioti">Sí</label>
@@ -202,7 +203,7 @@
 </div>
       <!-- Botón de Enviar -->
       <div class="d-grid">
-        <button type="submit" class="btn btn-primary">Enviar</button>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
       </div>
     </form>
   </div>

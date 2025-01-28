@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: rgb(241, 237, 237);
+    background-color: rgb(246, 244, 244);
     margin: 0; /* Asegura que no haya márgenes inesperados */
     background-image: url("{% static 'images/logofondo.png' %}");
     /* Ruta a la imagen */
