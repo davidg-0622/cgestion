@@ -26,6 +26,7 @@ urlpatterns = [
     path('creargestion/editar_gestion/<int:id>/', views.editar_gestion, name='editar_gestion'),  
     path('registro_usuario/', views.register_page, name='registro_usuario'), 
     path('login/', views.login_page, name='login'), 
+     path('logout/', views.logout_view, name='logout'),
 ]
 
 

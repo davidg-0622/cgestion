@@ -1,11 +1,11 @@
 * {
  
-    font-family: cursive;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-decoration: none;
 }
 
 body {
-    background-color: rgb(246, 244, 244);
+    background-color: rgb(224, 224, 224);
     margin: 0; /* Asegura que no haya márgenes inesperados */
     background-image: url("{% static 'images/logofondo.png' %}");
     /* Ruta a la imagen */
@@ -168,4 +168,13 @@ footer{
 /* Estilo para la opción placeholder */
 .placeholder-option {
     color: #f39c12;  /* Cambia este valor por el color que desees */
+  }
+
+
+
+
+  .checkbox-grande {
+    transform: scale(1.5); /* Ajusta el tamaño del checkbox */
+    margin-right: 10px;   /* Espaciado adicional si es necesario */
+    margin: 10px;
   }

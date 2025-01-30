@@ -5,27 +5,37 @@
 
 {% block content %}
 
+<!-- Barra superior -->
+<nav class="navbar navbar-expand-lg px-3" style="background-color: rgb(245, 242, 242);">
+  <div class="container-fluid">
+      <span class="navbar-text text-dark ms-auto">
+          Bienvenido, <strong>{{ user }}</strong>
+      </span>
+  </div>
+</nav>
+
+
 
 
 <div class="container-fluid d-flex flex-column align-items-center" style="min-height: 100vh; padding: 50px 15px; overflow-y: auto;">
   <div class="card shadow p-4" style="max-width: 1000px; width: 100%;">
     <h2 class="mb-4 text-center text-primary"><strong>Crear Gestión</strong></h2>
 
-    <form method="post" novalidate>
+    <form method="POST" novalidate>
       {% csrf_token %}
 
       <!-- Servicio -->
       <div class="mb-3">
         <label for="servicio" class="form-label"><strong>Servicio</strong></label>
-        <input type="text" class="form-control" id="servicio" name="servicio" placeholder="Ingrese el servicio" required>
+        <input type="text" class="form-control" id="servicio" name="servicio" required >
         <div class="invalid-feedback">Por favor, ingrese el servicio.</div>
       </div>
 
 <!-- Tipo de Gestión -->
 <div class="mb-3">
   <label for="tipo_de_gestion" class="form-label"><strong>Tipo de Gestión</strong></label>
-  <select class="form-select" id="tipo_de_gestion" name="tipo_de_gestion" required>
-    <option value="" disabled selected>Seleccione el tipo de gestión</option>
+  <select class="form-select" id="tipo_de_gestion" name="tipo_de_gestion" >
+    <option >-----</option>
     <option value="Evento">Evento</option>
     <option value="Incidente">Incidente</option>
     <option value="Orden de cambio">Orden de cambio</option>
@@ -37,15 +47,15 @@
       <!-- Número de Caso -->
       <div class="mb-3">
         <label for="numero_caso" class="form-label"><strong>Número de Caso</strong></label>
-        <input type="text" class="form-control" id="numero_caso" name="numero_caso" placeholder="Ingrese el número de caso" required>
+        <input type="text" class="form-control" id="numero_caso" name="numero_caso" >
         <div class="invalid-feedback">Por favor, ingrese el número de caso.</div>
       </div>
 
 <!-- Detectada Por -->
 <div class="mb-3">
   <label for="detectada_por" class="form-label"><strong>Detectada Por</strong></label>
-  <select class="form-select" id="detectada_por" name="detectada_por" required>
-    <option value="">Seleccione quién detectó el problema</option>
+  <select class="form-select" id="detectada_por" name="detectada_por" >
+
     <option value="Herramientas de monitoreo">Herramientas de monitoreo</option>
     <option value="Analista de confiabilidad">Analista de confiabilidad</option>
     <option value="Analista de soporte/Stand by">Analista de soporte/Stand by</option>
@@ -57,22 +67,26 @@
   <div class="invalid-feedback">Por favor, seleccione quién detectó el problema.</div>
 </div>
 
-
+<!-- Causado por certificado, OC -->
 <div class="mb-3">
-  <label class="form-label"><strong>Causado por certificado digital</strong></label>
-  <input type="checkbox" id="causado_por_certificado_digital" name="causado_por_certificado_digital" {% if causadoporc == "on" %} checked {% endif %}>
-  <label for="causado_por_certificado_digital">Sí</label>
+  <label class="form-label"><strong>Causado por certificado digital </strong></label>
+  <input type="checkbox" id="causado_por_certificado_digital" name="causado_por_certificado_digital" 
+         class="checkbox-grande" {% if causadoporc == "on" %} checked {% endif %}>
+  <label for="causado_por_certificado_digital" class="badge bg-success">Sí</label>
+
   <label class="form-label ms-4"><strong>Incidente Generado por OC</strong></label>
-  <input type="checkbox" id="incidente_generado_por_OC" name="incidente_generado_por_OC" {% if generadoporc == "on" %} checked {% endif %}>
-  <label for="incidente_generado_por_OC">Sí</label>
+  <input type="checkbox" id="incidente_generado_por_OC" name="incidente_generado_por_OC" 
+         class="checkbox-grande" {% if generadoporc == "on" %} checked {% endif %}>
+  <label for="incidente_generado_por_OC" class="badge bg-success">Sí</label>
+
   <div class="invalid-feedback">Por favor, complete los campos requeridos.</div>
 </div>
+
 
 <!-- Atribuible a -->
 <div class="mb-3">
   <label for="atribuible_a" class="form-label"><strong>Atribuible a</strong></label>
-  <select class="form-select" id="atribuible_a" name="atribuible_a" required>
-    <option value="" disabled selected>Seleccione a quién es atribuible</option>
+  <select class="form-select" id="atribuible_a" name="atribuible_a" >
     <option value="EVC">EVC</option>
     <option value="Cloud">Cloud</option>
     <option value="Base de datos">Base de datos</option>
@@ -94,8 +108,8 @@
 <!-- Tipo de Falla -->
 <div class="mb-3">
   <label for="tipo_de_falla" class="form-label"><strong>Tipo de Falla</strong></label>
-  <select class="form-select" id="tipo_de_falla" name="tipo_de_falla" required>
-    <option value="" disabled selected>Seleccione el tipo de falla</option>
+  <select class="form-select" id="tipo_de_falla" name="tipo_de_falla" >
+    <option >----</option>
     <option value="Parcial">Parcial</option>
     <option value="Total">Total</option>
   </select>
@@ -106,15 +120,15 @@
       <!-- Detalle -->
       <div class="mb-3">
         <label for="detalle" class="form-label"><strong>Detalle</strong></label>
-        <textarea class="form-control" id="detalle" name="detalle" rows="3" placeholder="Describa el detalle" required></textarea>
+        <textarea class="form-control" id="detalle" name="detalle" rows="3"  ></textarea>
         <div class="invalid-feedback">Por favor, describa el detalle.</div>
       </div>
 
    <!-- Tipo Causa -->
 <div class="mb-3">
   <label for="tipo_causa" class="form-label"><strong>Tipo Causa</strong></label>
-  <select class="form-select" id="tipo_causa" name="tipo_causa" required>
-    <option value="" disabled selected>Seleccione el tipo de causa</option>
+  <select class="form-select" id="tipo_causa" name="tipo_causa" >
+    <option >----</option>
     <option value="En investigacion">En investigación</option>
     <option value="Encontrado">Encontrado</option>
     <option value="No encontrado">No encontrado</option>
@@ -126,28 +140,28 @@
       <!-- Causa -->
       <div class="mb-3">
         <label for="causa" class="form-label"><strong>Causa</strong></label>
-        <textarea class="form-control" id="causa" name="causa" rows="3" placeholder="Describa la causa" required></textarea>
+        <textarea class="form-control" id="causa" name="causa" rows="3"  ></textarea>
         <div class="invalid-feedback">Por favor, describa la causa.</div>
       </div>
 
       <!-- Validaciones -->
       <div class="mb-3">
         <label for="validaciones" class="form-label"><strong>Validaciones</strong></label>
-        <textarea class="form-control" id="validaciones" name="validaciones" rows="3" placeholder="Ingrese las validaciones" required></textarea>
+        <textarea class="form-control" id="validaciones" name="validaciones" rows="3"  ></textarea>
         <div class="invalid-feedback">Por favor, ingrese las validaciones.</div>
       </div>
 
       <!-- Solución -->
       <div class="mb-3">
         <label for="solucion" class="form-label"><strong>Solución</strong></label>
-        <textarea class="form-control" id="solucion" name="solucion" rows="3" placeholder="Ingrese la solución" required></textarea>
+        <textarea class="form-control" id="solucion" name="solucion" rows="3"  ></textarea>
         <div class="invalid-feedback">Por favor, ingrese la solución.</div>
       </div>
 
       <!-- Responsable GIOTI -->
       <div class="mb-3">
         <label for="responsable_gioti" class="form-label"><strong>Responsable GIOTI</strong></label>
-        <input type="text" class="form-control" id="responsable_gioti" name="responsable_gioti" placeholder="Ingrese el responsable GIOTI" required>
+        <input type="text" class="form-control" id="responsable_gioti" name="responsable_gioti" >
         <div class="invalid-feedback">Por favor, ingrese el responsable GIOTI.</div>
       </div>
 
@@ -156,9 +170,9 @@
 
       <div class="mb-3">
         <label for="fecha_hora_inicial" class="form-label"><strong>Fecha y Hora Inicial</strong></label>
-        <input type="datetime-local" class="form-control d-inline w-auto me-3" id="fecha_hora_inicial" name="fecha_hora_inicial" required>
+        <input type="datetime-local" class="form-control d-inline w-auto me-3" id="fecha_hora_inicial" name="fecha_hora_inicial" >
         <label for="fecha_hora_final" class="form-label"><strong>Fecha y Hora Final</strong></label>
-        <input type="datetime-local" class="form-control d-inline w-auto" id="fecha_hora_final" name="fecha_hora_final" required>
+        <input type="datetime-local" class="form-control d-inline w-auto" id="fecha_hora_final" name="fecha_hora_final" >
         <div class="invalid-feedback">Por favor, complete las fechas y horas requeridas.</div>
       </div>
       
@@ -169,10 +183,10 @@
 <div class="mb-3">
   <label class="form-label"><strong>GIOTI</strong></label>
   <div>
-    <input type="checkbox" id="gioti" name="gioti" {% if gioti == "on" %} checked {% endif %}>
-    <label for="gioti">Sí</label>
+    <input type="checkbox" id="gioti" name="gioti" {% if gioti == "on" %} checked {% endif %}   class="checkbox-grande">
+    <label for="gioti" class="badge bg-success">Sí</label>
   </div>
-  <div class="invalid-feedback">Por favor, indique si aplica GIOTI.</div>
+  <div class="invalid-feedback"   >Por favor, indique si aplica GIOTI.</div>
 </div>
 
       <!-- Botón de Enviar -->
@@ -182,5 +196,7 @@
     </form>
   </div>
 </div>
+
+
 {% endblock %}
 

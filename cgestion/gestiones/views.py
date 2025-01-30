@@ -1,18 +1,17 @@
 from django.shortcuts import render, get_object_or_404
-
 from gestiones.models import Gestion, Servicio
 from django.contrib.auth.forms import UserCreationForm
 from gestiones.forms import RegisterForm
+from django.shortcuts import redirect
+from django.core.paginator import Paginator
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+
+
 
 
 
 ############################## Crear gestion #######################################
-
-from django.shortcuts import render, redirect
-from gestiones.models import Gestion
-from django.core.paginator import Paginator
-from django.contrib import messages
-from django.shortcuts import render
 
 def creargestion(request):
     if request.method == "POST":
@@ -180,8 +179,6 @@ def editar_gestion(request, id):
 
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
 
 def register_page(request):
     # Crea el formulario de registro
@@ -198,11 +195,6 @@ def register_page(request):
     return render(request, 'users/register.html', {'register_form': register_form})
 
 
-
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
 
 def login_page(request):
     if request.method == "POST":
@@ -222,7 +214,14 @@ def login_page(request):
 
 
 
-def inicio(request):
-    return render(request, 'gestiones.html')
+
+def logout_view(request):
+    logout(request)  # Cierra la sesión del usuario
+    return redirect('login')  # Redirige a la página de login (ajústala según tu URL)
+
+
+
+
+
 
 
