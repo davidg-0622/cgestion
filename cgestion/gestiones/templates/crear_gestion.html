@@ -9,7 +9,7 @@
 <nav class="navbar navbar-expand-lg px-3" style="background-color: rgb(245, 242, 242);">
   <div class="container-fluid">
       <span class="navbar-text text-dark ms-auto">
-          Bienvenido, <strong>{{ user }}</strong>
+          Bienvenido/a, <strong>{{ first_name }}</strong>
       </span>
   </div>
 </nav>
@@ -19,7 +19,7 @@
 
 <div class="container-fluid d-flex flex-column align-items-center" style="min-height: 100vh; padding: 50px 15px; overflow-y: auto;">
   <div class="card shadow p-4" style="max-width: 1000px; width: 100%;">
-    <h2 class="mb-4 text-center text-primary"><strong>Crear Gestión</strong></h2>
+    <h1 class="mb-4 text-center text-primary"><strong>Crear Gestión</strong></h1>
 
     <form method="POST" novalidate>
       {% csrf_token %}
@@ -158,24 +158,24 @@
         <div class="invalid-feedback">Por favor, ingrese la solución.</div>
       </div>
 
-      <!-- Responsable GIOTI -->
-      <div class="mb-3">
-        <label for="responsable_gioti" class="form-label"><strong>Responsable GIOTI</strong></label>
-        <input type="text" class="form-control" id="responsable_gioti" name="responsable_gioti" >
-        <div class="invalid-feedback">Por favor, ingrese el responsable GIOTI.</div>
-      </div>
+     <!-- Responsable GIOTI -->
+<div class="mb-3">
+  <label for="responsable_gioti" class="form-label"><strong>Responsable GIOTI</strong></label>
+  <input type="text" class="form-control" id="responsable_gioti" name="responsable_gioti" value="{{ user }}" readonly>
+</div>
 
 
-      <!-- Fecha iniciar y final-->
 
-      <div class="mb-3">
-        <label for="fecha_hora_inicial" class="form-label"><strong>Fecha y Hora Inicial</strong></label>
-        <input type="datetime-local" class="form-control d-inline w-auto me-3" id="fecha_hora_inicial" name="fecha_hora_inicial" >
-        <label for="fecha_hora_final" class="form-label"><strong>Fecha y Hora Final</strong></label>
-        <input type="datetime-local" class="form-control d-inline w-auto" id="fecha_hora_final" name="fecha_hora_final" >
-        <div class="invalid-feedback">Por favor, complete las fechas y horas requeridas.</div>
-      </div>
-      
+  <!-- Fecha iniciar y final -->
+<div class="mb-3">
+  <label for="fecha_hora_inicial" class="form-label"><strong>Fecha y Hora Inicial</strong></label>
+  <input type="datetime-local" class="form-control d-inline w-auto me-3" id="fecha_hora_inicial" name="fecha_hora_inicial" required>
+  
+  <label for="fecha_hora_final" class="form-label"><strong>Fecha y Hora Final</strong></label>
+  <input type="datetime-local" class="form-control d-inline w-auto" id="fecha_hora_final" name="fecha_hora_final" required>
+  
+  <div class="invalid-feedback">Por favor, complete las fechas y horas requeridas.</div>
+</div>
 
 
 

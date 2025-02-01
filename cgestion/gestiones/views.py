@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-
+from django.db.models import Q
 
 
 
@@ -14,6 +14,8 @@ from django.contrib.auth import authenticate, login
 ############################## Crear gestion #######################################
 
 def creargestion(request):
+    # Obtener el nombre del usuario autenticado (o "Invitado" si no está autenticado)
+    first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
     if request.method == "POST":
         # Obtener datos del formulario
         servicio = request.POST.get("servicio")
@@ -34,6 +36,8 @@ def creargestion(request):
         fecha_hora_final = request.POST.get("fecha_hora_final")
         postular_amg = request.POST.get("postular_amg") == "on"
         gioti = request.POST.get("gioti")== "on"
+        
+     
 
         # Crear el objeto Gestión
         gestion = Gestion(
@@ -61,7 +65,7 @@ def creargestion(request):
 
         return redirect("/")  # Redirigir a una página de listado o detalle
 
-    return render(request, "crear_gestion.html")
+    return render(request, "crear_gestion.html",{"first_name":first_name} )
 
 
 
@@ -69,11 +73,13 @@ def creargestion(request):
 
 
 
-from django.db.models import Q
+
 
 
 
 def listar_gestiones(request):
+    # Obtener el nombre del usuario autenticado (o "Invitado" si no está autenticado)
+    first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
     # Obtener el término de búsqueda desde los parámetros GET
     query = request.GET.get('q', '')
 
@@ -103,7 +109,7 @@ def listar_gestiones(request):
     page_obj = paginator.get_page(page_number)
 
     # Pasar las gestiones paginadas y el término de búsqueda al contexto
-    return render(request, "listar_gestiones.html", {"page_obj": page_obj, "query": query})
+    return render(request, "listar_gestiones.html", {"page_obj": page_obj, "query": query , "first_name": first_name})
 
 
 
@@ -114,6 +120,8 @@ def listar_gestiones(request):
 ############################# Editar gestion ###########################################
 
 def editar_gestion(request, id):
+    # Obtener el nombre del usuario autenticado (o "Invitado" si no está autenticado)
+    first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
     # Obtiene la instancia de la gestión a editar
     gestion = get_object_or_404(Gestion, id=id)
 
@@ -172,7 +180,7 @@ def editar_gestion(request, id):
         return redirect('listar_gestiones')  # Asume que 'listar_gestiones' es el nombre de la URL de gestiones.html
 
     return render(request, 'editar_gestion.html', {
-        'gestion': gestion,
+        'gestion': gestion, "first_name":first_name,
     })
 
 
@@ -218,9 +226,6 @@ def login_page(request):
 def logout_view(request):
     logout(request)  # Cierra la sesión del usuario
     return redirect('login')  # Redirige a la página de login (ajústala según tu URL)
-
-
-
 
 
 

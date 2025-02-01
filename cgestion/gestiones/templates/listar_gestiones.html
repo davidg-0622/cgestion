@@ -7,10 +7,14 @@
 
 
 <!-- Barra superior -->
-<nav class="navbar navbar-expand-lg px-3" style="background-color: rgb(245, 242, 242);">
+<nav class="navbar navbar-expand-lg px-3" style="background-color: rgb(224, 219, 219);">
   <div class="container-fluid">
       <span class="navbar-text text-dark ms-auto">
-          Bienvenido, <strong>{{ user }}</strong>
+          {% if first_name %}
+              Bienvenido/a, <strong>{{ first_name }}</strong>
+          {% else %}
+              Bienvenido/a, <strong>Invitado</strong>
+          {% endif %}
       </span>
   </div>
 </nav>

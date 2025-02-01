@@ -10,7 +10,7 @@
 <nav class="navbar navbar-expand-lg px-3" style="background-color: rgb(245, 242, 242);">
   <div class="container-fluid">
       <span class="navbar-text text-dark ms-auto">
-          Bienvenido, <strong>{{ user }}</strong>
+          Bienvenido/a, <strong>{{ first_name }}</strong>
       </span>
   </div>
 </nav>
@@ -21,8 +21,8 @@
 
 
 <div class="container-fluid d-flex flex-column align-items-center" style="min-height: 100vh; padding: 50px 15px; overflow-y: auto;">
-  <div class="card shadow p-4" style="max-width: 800px; width: 100%;">
-    <h2 class="mb-4 text-center text-danger">Editar Gestión</h2>
+  <div class="card shadow p-4" style="max-width: 1000px; width: 100%;">
+    <h1 class="mb-4 text-center text-danger"><strong>Editar gestión</strong></h1>
 
     <form method="POST" novalidate>
       {% csrf_token %}
@@ -76,22 +76,17 @@
      <!-- Causado por certificado digital -->
 <div class="mb-3">
   <label class="form-label"><strong>Causado por certificado digital</strong></label>
-  <div>
-    <input type="checkbox" id="causado_por_certificado_digital" name="causado_por_certificado_digital" {% if gestion.causado_por_certificado_digital %} checked {% endif %} {% if causadoporc == "on" %} checked {% endif %}>
-    <label for="causado_por_certificado_digital">Sí</label>
-  </div>
-  <div class="invalid-feedback">Por favor, indique si fue causado por certificado digital.</div>
-</div>
-
-<!-- Incidente Generado por OC -->
-<div class="mb-3">
+  <input type="checkbox" id="causado_por_certificado_digital" class="checkbox-grande" name="causado_por_certificado_digital" {% if gestion.causado_por_certificado_digital %} checked {% endif %} {% if causadoporc == "on" %} checked {% endif %}>
+    <label for="causado_por_certificado_digital" class="badge bg-success"> Sí </label>
   <label class="form-label"><strong>Incidente Generado por OC</strong></label>
-  <div>
-    <input type="checkbox" id="incidente_generado_por_OC" name="incidente_generado_por_OC" {% if gestion.incidente_generado_por_OC %} checked {% endif %} {% if generadoporc == "on" %} checked {% endif %}>
-    <label for="incidente_generado_por_OC">Sí</label>
-  </div>
+  <input type="checkbox" id="incidente_generado_por_OC" class="checkbox-grande" name="incidente_generado_por_OC" {% if gestion.incidente_generado_por_OC %} checked {% endif %} {% if generadoporc == "on" %} checked {% endif %}>
+  <div class="invalid-feedback">Por favor, indique si fue causado por certificado digital.</div>
+  <label for="incidente_generado_por_OC" class="badge bg-success"> Sí </label>
   <div class="invalid-feedback">Por favor, indique si el incidente fue generado por OC.</div>
 </div>
+
+
+
 
 <!-- Atribuible a -->
 <div class="mb-3">
@@ -175,32 +170,29 @@
   <div class="invalid-feedback">Por favor, ingrese la solución.</div>
 </div>
 
-    <!-- Responsable GIOTI -->
+<!-- Responsable GIOTI -->
 <div class="mb-3">
   <label for="responsable_gioti" class="form-label"><strong>Responsable GIOTI</strong></label>
-  <input type="text" class="form-control" id="responsable_gioti" name="responsable_gioti" value="{{ gestion.responsable_gioti }}" placeholder="Ingrese el responsable GIOTI" >
+  <input type="text" class="form-control" id="responsable_gioti" name="responsable_gioti" value="{{ gestion.responsable_gioti }} -- {{ user }}" readonly>
   <div class="invalid-feedback">Por favor, ingrese el responsable GIOTI.</div>
 </div>
 
 <!-- Fecha y Hora Inicial -->
 <div class="mb-3">
   <label for="fecha_hora_inicial" class="form-label"><strong>Fecha y Hora Inicial</strong></label>
-  <input type="datetime-local" class="form-control" id="fecha_hora_inicial" name="fecha_hora_inicial" value="{{ gestion.fecha_hora_inicial|date:'Y-m-d\TH:i' }}" >
+  <input type="datetime-local" class="form-control d-inline w-auto me-3" id="fecha_hora_inicial" name="fecha_hora_inicial" value="{{ gestion.fecha_hora_inicial|date:'Y-m-d\TH:i' }}" >
+  <label for="fecha_hora_final" class="form-label"><strong>Fecha y Hora Final</strong></label>
+  <input type="datetime-local" class="form-control d-inline w-auto" id="fecha_hora_final" name="fecha_hora_final" value="{{ gestion.fecha_hora_final|date:'Y-m-d\TH:i' }}" >
   <div class="invalid-feedback">Por favor, ingrese la fecha y hora inicial.</div>
 </div>
 
-<!-- Fecha y Hora Final -->
-<div class="mb-3">
-  <label for="fecha_hora_final" class="form-label"><strong>Fecha y Hora Final</strong></label>
-  <input type="datetime-local" class="form-control" id="fecha_hora_final" name="fecha_hora_final" value="{{ gestion.fecha_hora_final|date:'Y-m-d\TH:i' }}" >
-  <div class="invalid-feedback">Por favor, ingrese la fecha y hora final.</div>
-</div>
+
 
   <!-- Checkbox Postular AMG -->
   <div class="mb-3">
     <label class="form-label"><strong>Postular AMG</strong></label>
     <div>
-      <input type="checkbox" id="postular_amg" name="postular_amg" {% if gestion.postular_amg %} checked {% endif %}>
+      <input type="checkbox" id="postular_amg" class="checkbox-grande" name="postular_amg" {% if gestion.postular_amg %} checked {% endif %}>
       <label for="postular_amg">Sí</label>
     </div>
   </div>
@@ -209,7 +201,7 @@
 <div class="mb-3">
   <label class="form-label"><strong>GIOTI</strong></label>
   <div>
-    <input type="checkbox" id="gioti" name="gioti" {% if gestion.gioti %} checked {% endif %}>
+    <input type="checkbox" id="gioti" name="gioti" class="checkbox-grande" {% if gestion.gioti %} checked {% endif %}>
     <label for="gioti">Sí</label>
   </div>
 </div>
