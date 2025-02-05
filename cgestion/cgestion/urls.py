@@ -16,21 +16,20 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from gestiones import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('', views.listar_gestiones, name='listar_gestiones'),  # Ruta para la raíz
-    path('creargestion/', views.creargestion, name='creargestion'), 
-    path('creargestion/editar_gestion/<int:id>/', views.editar_gestion, name='editar_gestion'),  
-    path('registro_usuario/', views.register_page, name='registro_usuario'), 
-    path('login/', views.login_page, name='login'), 
-     path('logout/', views.logout_view, name='logout'),
+    path('creargestion/', views.creargestion, name='creargestion'),
+    path('creargestion/editar_gestion/<int:id>/',views.editar_gestion, name='editar_gestion'),
+    path('registro_usuario/', views.register_page, name='registro_usuario'),
+    path('login/', views.login_page, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+
+
+    ######## urls de mejorascgm#####
+
+    path('mejorascgm/', include('mejorascgm.urls')),
 ]
-
-
-
-
-
-

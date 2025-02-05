@@ -19,7 +19,7 @@
 
 <div class="container-fluid d-flex flex-column align-items-center" style="min-height: 100vh; padding: 50px 15px; overflow-y: auto;">
   <div class="card shadow p-4" style="max-width: 1000px; width: 100%;">
-    <h1 class="mb-4 text-center text-primary"><strong>Crear Gestión</strong></h1>
+    <h3 class="mb-4 text-center text-primary"><strong>Crear Gestión</strong></h3>
 
     <form method="POST" novalidate>
       {% csrf_token %}
@@ -70,13 +70,11 @@
 <!-- Causado por certificado, OC -->
 <div class="mb-3">
   <label class="form-label"><strong>Causado por certificado digital </strong></label>
-  <input type="checkbox" id="causado_por_certificado_digital" name="causado_por_certificado_digital" 
-         class="checkbox-grande" {% if causadoporc == "on" %} checked {% endif %}>
+  <input type="checkbox" id="causado_por_certificado_digital" name="causado_por_certificado_digital" class="checkbox-grande" {% if causadoporc == "on" %} checked {% endif %}>
   <label for="causado_por_certificado_digital" class="badge bg-success">Sí</label>
 
   <label class="form-label ms-4"><strong>Incidente Generado por OC</strong></label>
-  <input type="checkbox" id="incidente_generado_por_OC" name="incidente_generado_por_OC" 
-         class="checkbox-grande" {% if generadoporc == "on" %} checked {% endif %}>
+  <input type="checkbox" id="incidente_generado_por_OC" name="incidente_generado_por_OC" class="checkbox-grande" {% if generadoporc == "on" %} checked {% endif %}>
   <label for="incidente_generado_por_OC" class="badge bg-success">Sí</label>
 
   <div class="invalid-feedback">Por favor, complete los campos requeridos.</div>

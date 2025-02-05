@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: rgb(224, 224, 224);
+    background-color: rgb(245, 244, 244);
     margin: 0; /* Asegura que no haya márgenes inesperados */
     background-image: url("{% static 'images/logofondo.png' %}");
     /* Ruta a la imagen */
@@ -177,4 +177,17 @@ footer{
     transform: scale(1.5); /* Ajusta el tamaño del checkbox */
     margin-right: 10px;   /* Espaciado adicional si es necesario */
     margin: 10px;
+  }
+
+
+ 
+
+  td {
+    max-width: 500px;  /* Ajusta el tamaño según necesites */
+    max-height: 500px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    white-space: pre-wrap;  /* Mantiene los saltos de línea y los espacios */
+    word-wrap: break-word;  /* Asegura que el texto largo se ajuste */
   }

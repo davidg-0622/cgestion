@@ -7,6 +7,7 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.db.models import Q
+from datetime import datetime
 
 
 
@@ -124,6 +125,9 @@ def editar_gestion(request, id):
     first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
     # Obtiene la instancia de la gestión a editar
     gestion = get_object_or_404(Gestion, id=id)
+    
+    # Obtener la fecha y hora actuales
+    fecha_hora_actual = datetime.now().strftime('%Y-%m-%dT%H:%M')
 
     if request.method == 'POST':
         # Procesa los campos del formulario
@@ -179,9 +183,7 @@ def editar_gestion(request, id):
         # Redirige a la página de gestiones
         return redirect('listar_gestiones')  # Asume que 'listar_gestiones' es el nombre de la URL de gestiones.html
 
-    return render(request, 'editar_gestion.html', {
-        'gestion': gestion, "first_name":first_name,
-    })
+    return render(request, 'editar_gestion.html', {'gestion': gestion, "first_name":first_name,'fecha_hora_actual': fecha_hora_actual})
 
 
 
