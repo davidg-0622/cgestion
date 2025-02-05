@@ -133,7 +133,8 @@
                     <div class="row mb-3">
                         <div class="col">
                             <label for="variable" class="form-label"><strong>Variable</strong></label>
-                            <input type="text" class="form-control" id="variable" name="variable" required>
+                            <textarea class="form-control" id="variable" name="variable" rows="3"required></textarea>
+                           
                         </div>
                         <div class="col">
                             <label for="peticion_reincidente" class="form-label"><strong>Petición
@@ -156,8 +157,7 @@
                         </div>
                         <div class="col">
                             <label for="observaciones" class="form-label"><strong>Observaciones</strong></label>
-                            <textarea class="form-control" id="observaciones" name="observaciones" rows="3"
-                                required></textarea>
+                            <textarea class="form-control" id="observaciones" name="observaciones" rows="3"required></textarea>
                         </div>
                     </div>
 
@@ -179,13 +179,14 @@
                         </div>
                     </div>
 
-                    <!-- Mejora creada por -->
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label for="mejora_creada_por" class="form-label"><strong>Mejora creada por</strong></label>
-                            <input type="text" class="form-control" id="mejora_creada_por" name="mejora_creada_por" value="{{ user }}" readonly>
-                        </div>
-                    </div>
+                   <!-- Mejora creada por (Campo más pequeño) -->
+<div class="row mb-5">
+    <div class="col-6"> <!-- Ajusta el tamaño de la columna -->
+        <label for="mejora_creada_por" class="form-label"><strong>Mejora creada por</strong></label>
+        <input type="text" class="form-control form-control-sm" id="mejora_creada_por" name="mejora_creada_por" value="{{ user }}" readonly>
+    </div>
+</div>
+
 
 
                     <hr>

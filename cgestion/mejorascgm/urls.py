@@ -21,5 +21,6 @@ from . import views
 urlpatterns = [
     path('crear_mejora/', views.crear_mejora, name='crear_mejora'),
     path('listar_mejora/', views.listar_mejora, name='listar_mejora'),
+    path('listar_mejoras_cerradas/', views.listar_mejoras_cerradas, name='listar_mejoras_cerradas'),
     path('editar_mejora/<int:id>/', views.editar_mejora, name='editar_mejora'),
 ]

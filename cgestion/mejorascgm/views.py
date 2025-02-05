@@ -109,6 +109,46 @@ def listar_mejora(request):
 
 
 
+
+################################# listar mejora cerradas  #######################################
+
+
+
+
+def listar_mejoras_cerradas(request):
+    first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
+    query = request.GET.get('q', '')
+
+    # Filtrar solo las mejoras con estado "Abierto"
+    mejora = Mejoracgm.objects.filter(
+        estado="cerrado"  # Filtra solo las mejoras abiertas
+    ).filter(
+        Q(servicio__icontains=query) |
+        Q(herramienta_de_monitoreo__icontains=query) |
+        Q(tipo_de_mejora__icontains=query) |
+        Q(numero_peticion__icontains=query) |
+        Q(numero_wo__icontains=query) |
+        Q(servidor__icontains=query) |
+        Q(variable__icontains=query) |
+        Q(peticion_reincidente__icontains=query) |
+        Q(peticion_anterior__icontains=query) |
+        Q(observaciones__icontains=query) |
+        Q(fecha_hora_mejora__icontains=query) |
+        Q(area_responsable__icontains=query) |
+        Q(mejora_creada_por__icontains=query) |
+        Q(estado__icontains=query) |
+        Q(solucion__icontains=query) 
+    ).order_by('-fecha_hora_mejora')
+
+    paginator = Paginator(mejora, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "listar_mejoras_cerradas.html", {"page_obj": page_obj, "query": query, "first_name": first_name})
+
+
+
+
 ##################################################### Editar mejora ##################################################################3
 
 
