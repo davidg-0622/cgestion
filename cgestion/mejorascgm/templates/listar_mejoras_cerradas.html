@@ -32,7 +32,7 @@
 
 
 <!-- Botón para crear nueva gestión -->
-<a href="{% url 'listar_mejora' %}" class="btn btn-danger mt-5 mx-5"> &#8592;  mejoras abiertas</a>
+<a href="{% url 'listar_mejora' %}" class="btn btn-danger mt-5 mx-5"> &#8592; mejoras abiertas</a>
 
 <!-- Campo de búsqueda -->
 <form method="GET" class="d-flex my-3 mx-5">
@@ -51,12 +51,14 @@
                 <th class="text-center">Tipo de mejora</th>
                 <th class="text-center">Numero de pedido</th>
                 <th class="text-center">Numero WO</th>
+                <th class="text-center">Solucion</th>
                 <th class="text-center">Servidor</th>
                 <th class="text-center">Variable</th>
                 <th class="text-center">Peticion reincidente</th>
                 <th class="text-center">Peticion anterior</th>
                 <th class="text-center">Observaciones</th>
                 <th class="text-center">fecha_hora_mejora</th>
+                <th class="text-center">fecha hora cierre</th>
                 <th class="text-center">Area responsable</th>
                 <th class="text-center">Mejora creada por</th>
             </tr>
@@ -70,12 +72,14 @@
                 <td>{{ mejora.tipo_de_mejora }}</td>
                 <td>{{ mejora.numero_peticion }}</td>
                 <td>{{ mejora.numero_wo }}</td>
+                <td>{{ mejora.solucion }}</td>
                 <td>{{ mejora.servidor }}</td>
                 <td>{{ mejora.variable }}</td>
                 <td>{{ mejora.peticion_reincidente }}</td>
                 <td>{{ mejora.peticion_anterior }}</td>
                 <td>{{ mejora.observaciones }}</td>
                 <td>{{ mejora.fecha_hora_mejora }}</td>
+                <td>{{ mejora.fecha_hora }}</td>
                 <td>{{ mejora.area_responsable }}</td>
                 <td>{{ mejora.mejora_creada_por }}</td>
                 </td>

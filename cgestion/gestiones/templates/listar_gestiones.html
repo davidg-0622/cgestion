@@ -1,10 +1,6 @@
 {% extends "layout.html" %}
 
-
-
-
 {% block content %}
-
 
 <!-- Barra superior -->
 <nav class="navbar navbar-expand-lg px-3" style="background-color: rgb(224, 219, 219);">
@@ -19,81 +15,99 @@
   </div>
 </nav>
 
-
 {% if messages %}
     {% for message in messages %}
         <div class="alert alert-success" role="alert">
             {{ message }}
         </div>
     {% endfor %}
-{% endif %} 
-
-
-
-
-<!-- Botón para crear nueva gestión -->
-<a href="/creargestion" class="btn btn-success mt-5 mx-5">+ Crear Gestion</a>
-
-<!-- Campo de búsqueda -->
-<form method="GET" class="d-flex my-3 mx-5">
-  <input
-    type="text"
-    name="q"
-    class="form-control me-2"
-    placeholder="Buscar gestiones..."
-    value="{{ query|default:'' }}"
-  >
-  <button type="submit" class="btn btn-primary">Buscar</button>
+{% endif %}
+<!-- Formulario para búsqueda -->
+<form method="GET" action="{% url 'listar_gestiones' %}">
+  <!-- Campo de búsqueda con menor ancho -->
+  <div class="input-group my-3 mx-2">
+    <input type="text" name="q" class="form-control form-control-sm" style="width: 150px;" placeholder="Buscar gestiones..." value="{{ query|default:'' }}">
+    <button type="submit" class="btn btn-primary btn-sm">Buscar</button>
+  </div>
 </form>
 
-<!-- Tabla de gestiones -->
-<div class="table-responsive">
-  <table class="table table-striped table-bordered table-hover">
-    <thead class="table-dark">
-      <tr>
-        <th class="text-center">Número Caso</th>
-        <th class="text-center">Detalle</th>
-        <th class="text-center">Solución</th>
-        <th class="text-center">Servicio</th>
-        <th class="text-center">Responsables</th>
-        <th class="text-center">Fecha y Hora Inicial</th>
-        <th class="text-center">Fecha y Hora Final</th>
-        <th class="text-center">AMG</th>
-        <th class="text-center">GIOTI</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for gestion in page_obj %}
-      <tr>
-        <td>
-          <a href="{% url 'editar_gestion' gestion.id %}" class="text-decoration-none">
-            {{ gestion.numero_caso }}
-          </a>
-        <td>{{ gestion.detalle }}</td>
-        <td>{{ gestion.solucion }}</td>
-        <td>{{ gestion.servicio }}</td>
-        <td>{{ gestion.responsable_gioti }}</td>
-        <td>{{ gestion.fecha_hora_inicial }}</td>
-        <td>{{ gestion.fecha_hora_final }}</td>
-        <td>
-          {% if gestion.postular_amg %}
-            <span class="badge bg-success">Sí</span>
-          {% else %}
-            <span class="badge bg-danger">No</span>
-          {% endif %}
-        </td>
-        <td>
-          {% if gestion.gioti %}
-            <span class="badge bg-success">Sí</span>
-          {% else %}
-            <span class="badge bg-danger">No</span>
-          {% endif %}
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
+<form method="GET" action="{% url 'descargar_gestiones' %}">
+  <div class="d-flex justify-content-between">
+    <!-- Selector de formato -->
+
+  <!-- Tabla de gestiones -->
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th class="text-center">Seleccionar</th>
+          <th class="text-center">Número Caso</th>
+          <th class="text-center">Detalle</th>
+          <th class="text-center">Solución</th>
+          <th class="text-center">Servicio</th>
+          <th class="text-center">Responsables</th>
+          <th class="text-center">Fecha y Hora Inicial</th>
+          <th class="text-center">Fecha y Hora Final</th>
+          <th class="text-center">AMG</th>
+          <th class="text-center">GIOTI</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for gestion in page_obj %}
+        <tr>
+          <td>
+            <!-- Checkbox con el id de la gestión -->
+            <input type="checkbox" name="gestiones" value="{{ gestion.id }}">
+          </td>
+          <td>
+            <a href="{% url 'editar_gestion' gestion.id %}" class="text-decoration-none">
+              {{ gestion.numero_caso }}
+            </a>
+          </td>
+          <td>{{ gestion.detalle }}</td>
+          <td>{{ gestion.solucion }}</td>
+          <td>{{ gestion.servicio }}</td>
+          <td>{{ gestion.responsable_gioti }}</td>
+          <td>{{ gestion.fecha_hora_inicial }}</td>
+          <td>{{ gestion.fecha_hora_final }}</td>
+          <td>
+            {% if gestion.postular_amg %}
+              <span class="badge bg-success">Sí</span>
+            {% else %}
+              <span class="badge bg-danger">No</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if gestion.gioti %}
+              <span class="badge bg-success">Sí</span>
+            {% else %}
+              <span class="badge bg-danger">No</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div>
+      <select name="formato" class="form-control form-control-sm" style="width: auto;">
+        <option value="csv">CSV</option>
+        <option value="xlsx">XLSX</option>
+      </select>
+    </div>
+    
+  
+    <!-- Botón de descarga -->
+    <button type="submit" class="btn btn-warning mx-6">
+      📥 Descargar
+    </button>
+  </div>
+  </div>
+
+
+
+</form>
+
 
 <!-- Paginación -->
 <nav aria-label="Page navigation">
@@ -121,4 +135,6 @@
     {% endif %}
   </ul>
 </nav>
+
 {% endblock %}
+

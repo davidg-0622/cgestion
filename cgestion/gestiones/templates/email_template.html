@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reporte de Gestiones</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid black; padding: 8px; text-align: center; }
+        th { background-color: #343a40; color: white; }
+    </style>
+</head>
+<body>
+    {% for gestion in gestiones %}
+    <p>Se creao la gestion con el servicio {{ gestion.servicio }} y numero de {{ gestion.numero_caso }}</p>
+    {% endfor %}
+    <table>
+        <thead>
+            <tr>
+                <th>Número Caso</th>
+                <th>Detalle</th>
+                <th>Solución</th>
+                <th>Servicio</th>
+                <th>Responsables</th>
+                <th>Fecha y Hora Inicial</th>
+                <th>Fecha y Hora Final</th>
+                <th>AMG</th>
+                <th>GIOTI</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for gestion in gestiones %}
+            <tr>
+                <td>{{ gestion.numero_caso }}</td>
+                <td>{{ gestion.detalle }}</td>
+                <td>{{ gestion.solucion }}</td>
+                <td>{{ gestion.servicio }}</td>
+                <td>{{ gestion.responsable_gioti }}</td>
+                <td>{{ gestion.fecha_hora_inicial }}</td>
+                <td>{{ gestion.fecha_hora_final }}</td>
+                <td>{% if gestion.postular_amg %}✔{% else %}✘{% endif %}</td>
+                <td>{% if gestion.gioti %}✔{% else %}✘{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

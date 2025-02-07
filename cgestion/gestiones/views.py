@@ -8,22 +8,26 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.db.models import Q
 from datetime import datetime
+from django.utils import timezone
 
 
 
 
 ############################## Crear gestion #######################################
 
+
 def creargestion(request):
-    # Obtener el nombre del usuario autenticado (o "Invitado" si no está autenticado)
     first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
+    
+    fecha_hora_mejora = timezone.now()  # Obtiene la fecha y hora actual
+
     if request.method == "POST":
         # Obtener datos del formulario
         servicio = request.POST.get("servicio")
         tipo_de_gestion = request.POST.get("tipo_de_gestion")
         numero_caso = request.POST.get("numero_caso")
         detectada_por = request.POST.get("detectada_por")
-        causado_por_certificado_digital = request.POST.get("causado_por_certificado_digital")== "on"
+        causado_por_certificado_digital = request.POST.get("causado_por_certificado_digital") == "on"
         incidente_generado_por_OC = request.POST.get("incidente_generado_por_OC") == "on"
         atribuible_a = request.POST.get("atribuible_a")
         tipo_de_falla = request.POST.get("tipo_de_falla")
@@ -33,12 +37,10 @@ def creargestion(request):
         validaciones = request.POST.get("validaciones")
         solucion = request.POST.get("solucion")
         responsable_gioti = request.POST.get("responsable_gioti")
-        fecha_hora_inicial = request.POST.get("fecha_hora_inicial")
+        fecha_hora_inicial = request.POST.get("fecha_hora_inicial") or timezone.now()  # Si no se envía, usa la fecha actual
         fecha_hora_final = request.POST.get("fecha_hora_final")
         postular_amg = request.POST.get("postular_amg") == "on"
-        gioti = request.POST.get("gioti")== "on"
-        
-     
+        gioti = request.POST.get("gioti") == "on"
 
         # Crear el objeto Gestión
         gestion = Gestion(
@@ -66,7 +68,8 @@ def creargestion(request):
 
         return redirect("/")  # Redirigir a una página de listado o detalle
 
-    return render(request, "crear_gestion.html",{"first_name":first_name} )
+    return render(request, "crear_gestion.html", {"first_name": first_name, "fecha_hora_mejora": fecha_hora_mejora})
+
 
 
 
@@ -231,4 +234,145 @@ def logout_view(request):
 
 
 
+##########################enviar email ###################
 
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.shortcuts import render
+from .models import Gestion
+
+def enviar_gestion_email(request):
+    # Obtener todas las gestiones
+    gestiones = Gestion.objects.all()
+
+    # Renderizar la tabla como HTML
+    contenido_html = render_to_string('email_template.html', {'gestiones': gestiones})
+  
+    # Configurar el correo
+    subject = "Reporte de Gestiones CGM "
+    from_email = "davidg06.buitrago@gmail.com"
+    recipient_list = ["davidg06.buitrago@gmail.com"]  # Cambia esto
+
+    # Crear el correo con contenido HTML
+    email = EmailMessage(subject, contenido_html, from_email, recipient_list)
+    email.content_subtype = "html"  # Indicar que es un email en HTML
+
+    try:
+        email.send()
+        return render(request, 'success.html', {'mensaje': 'Correo enviado correctamente'})
+    except Exception as e:
+        return render(request, 'error.html', {'mensaje': f'Error al enviar correo: {str(e)}'})
+
+
+##############################descagar gestiones ######################################3
+import csv
+import openpyxl
+from django.http import HttpResponse
+from .models import Gestion
+
+def descargar_gestiones(request):
+    # Obtener los IDs seleccionados desde el formulario
+    ids_seleccionados = request.GET.getlist("gestiones")
+
+    # Filtrar las gestiones seleccionadas
+    gestiones = Gestion.objects.filter(id__in=ids_seleccionados)
+    
+    # Obtener el formato deseado desde la URL, por defecto CSV
+    formato = request.GET.get('formato', 'csv')
+    
+    if formato == 'csv':
+        # Crear la respuesta con CSV
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="gestiones_seleccionadas.csv"'
+
+        # Crear un escritor CSV
+        writer = csv.writer(response)
+        
+        # Escribir encabezados
+        writer.writerow([
+            "ID", "Servicio", "Tipo de Gestión", "Número de Caso", "Detectada Por",
+            "Causado por Certificado Digital", "Incidente Generado por OC", "Atribuible A",
+            "Tipo de Falla", "Detalle", "Tipo de Causa", "Causa", "Validaciones",
+            "Solución", "Responsable GIOTI", "Fecha Hora Inicial", "Fecha Hora Final",
+            "Postular AMG", "GIOTI"
+        ])
+        
+        # Escribir datos de las gestiones seleccionadas
+        for gestion in gestiones:
+            # Eliminar la zona horaria si está presente
+            fecha_hora_inicial = gestion.fecha_hora_inicial.replace(tzinfo=None) if gestion.fecha_hora_inicial else None
+            fecha_hora_final = gestion.fecha_hora_final.replace(tzinfo=None) if gestion.fecha_hora_final else None
+            
+            writer.writerow([
+                gestion.id,
+                gestion.servicio,
+                gestion.tipo_de_gestion,
+                gestion.numero_caso,
+                gestion.detectada_por,
+                gestion.causado_por_certificado_digital,
+                gestion.incidente_generado_por_OC,
+                gestion.atribuible_a,
+                gestion.tipo_de_falla,
+                gestion.detalle,
+                gestion.tipo_causa,
+                gestion.causa,
+                gestion.validaciones,
+                gestion.solucion,
+                gestion.responsable_gioti,
+                fecha_hora_inicial,
+                fecha_hora_final,
+                gestion.postular_amg,
+                gestion.gioti
+            ])
+        
+    elif formato == 'xlsx':
+        # Crear la respuesta con XLSX
+        response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response["Content-Disposition"] = 'attachment; filename="gestiones_seleccionadas.xlsx"'
+
+        # Crear un libro de trabajo y una hoja
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Gestiones"
+
+        # Escribir encabezados
+        ws.append([
+            "ID", "Servicio", "Tipo de Gestión", "Número de Caso", "Detectada Por",
+            "Causado por Certificado Digital", "Incidente Generado por OC", "Atribuible A",
+            "Tipo de Falla", "Detalle", "Tipo de Causa", "Causa", "Validaciones",
+            "Solución", "Responsable GIOTI", "Fecha Hora Inicial", "Fecha Hora Final",
+            "Postular AMG", "GIOTI"
+        ])
+
+        # Escribir datos de las gestiones seleccionadas
+        for gestion in gestiones:
+            # Eliminar la zona horaria si está presente
+            fecha_hora_inicial = gestion.fecha_hora_inicial.replace(tzinfo=None) if gestion.fecha_hora_inicial else None
+            fecha_hora_final = gestion.fecha_hora_final.replace(tzinfo=None) if gestion.fecha_hora_final else None
+            
+            ws.append([
+                gestion.id,
+                gestion.servicio,
+                gestion.tipo_de_gestion,
+                gestion.numero_caso,
+                gestion.detectada_por,
+                gestion.causado_por_certificado_digital,
+                gestion.incidente_generado_por_OC,
+                gestion.atribuible_a,
+                gestion.tipo_de_falla,
+                gestion.detalle,
+                gestion.tipo_causa,
+                gestion.causa,
+                gestion.validaciones,
+                gestion.solucion,
+                gestion.responsable_gioti,
+                fecha_hora_inicial,
+                fecha_hora_final,
+                gestion.postular_amg,
+                gestion.gioti
+            ])
+
+        # Guardar el archivo en la respuesta
+        wb.save(response)
+
+    return response

@@ -18,54 +18,55 @@
 
 
 <div class="container-fluid d-flex flex-column align-items-center" style="min-height: 100vh; padding: 50px 15px; overflow-y: auto;">
-  <div class="card shadow p-4" style="max-width: 1000px; width: 100%;">
+  <div class="card shadow p-4" style="max-width: 1500px; width: 100%;">
     <h3 class="mb-4 text-center text-primary"><strong>Crear Gestión</strong></h3>
 
     <form method="POST" novalidate>
       {% csrf_token %}
 
-      <!-- Servicio -->
-      <div class="mb-3">
-        <label for="servicio" class="form-label"><strong>Servicio</strong></label>
-        <input type="text" class="form-control" id="servicio" name="servicio" required >
-        <div class="invalid-feedback">Por favor, ingrese el servicio.</div>
+      <div class="mb-3 d-flex flex-wrap">
+        <!-- Servicio -->
+        <div class="me-3 w-25">
+          <label for="servicio" class="form-label"><strong>Servicio</strong></label>
+          <input type="text" class="form-control" id="servicio" name="servicio" required>
+          <div class="invalid-feedback">Por favor, ingrese el servicio.</div>
+        </div>
+      
+        <!-- Tipo de Gestión -->
+        <div class="me-3 w-22">
+          <label for="tipo_de_gestion" class="form-label"><strong>Tipo de Gestión</strong></label>
+          <select class="form-select" id="tipo_de_gestion" name="tipo_de_gestion" required>
+            <option>-----</option>
+            <option value="Evento">Evento</option>
+            <option value="Incidente">Incidente</option>
+            <option value="Orden de cambio">Orden de cambio</option>
+          </select>
+          <div class="invalid-feedback">Por favor, seleccione un tipo de gestión.</div>
+        </div>
+      
+        <!-- Número de Caso -->
+        <div class="me-3 w-25">
+          <label for="numero_caso" class="form-label"><strong>Número de Caso</strong></label>
+          <input type="text" class="form-control" id="numero_caso" name="numero_caso" required>
+          <div class="invalid-feedback">Por favor, ingrese el número de caso.</div>
+        </div>
+      
+        <!-- Detectada Por -->
+        <div class="w-25">
+          <label for="detectada_por" class="form-label"><strong>Detectada Por</strong></label>
+          <select class="form-select" id="detectada_por" name="detectada_por">
+            <option value="Herramientas de monitoreo">Herramientas de monitoreo</option>
+            <option value="Analista de confiabilidad">Analista de confiabilidad</option>
+            <option value="Analista de soporte/Stand by">Analista de soporte/Stand by</option>
+            <option value="Torre de control">Torre de control</option>
+            <option value="Pruebas manuales CGM">Pruebas manuales CGM</option>
+            <option value="Proveedor/aliado">Proveedor/aliado</option>
+            <option value="Otros">Otros</option>
+          </select>
+          <div class="invalid-feedback">Por favor, seleccione quién detectó el problema.</div>
+        </div>
       </div>
-
-<!-- Tipo de Gestión -->
-<div class="mb-3">
-  <label for="tipo_de_gestion" class="form-label"><strong>Tipo de Gestión</strong></label>
-  <select class="form-select" id="tipo_de_gestion" name="tipo_de_gestion" >
-    <option >-----</option>
-    <option value="Evento">Evento</option>
-    <option value="Incidente">Incidente</option>
-    <option value="Orden de cambio">Orden de cambio</option>
-  </select>
-  <div class="invalid-feedback">Por favor, seleccione un tipo de gestión.</div>
-</div>
-
-
-      <!-- Número de Caso -->
-      <div class="mb-3">
-        <label for="numero_caso" class="form-label"><strong>Número de Caso</strong></label>
-        <input type="text" class="form-control" id="numero_caso" name="numero_caso" >
-        <div class="invalid-feedback">Por favor, ingrese el número de caso.</div>
-      </div>
-
-<!-- Detectada Por -->
-<div class="mb-3">
-  <label for="detectada_por" class="form-label"><strong>Detectada Por</strong></label>
-  <select class="form-select" id="detectada_por" name="detectada_por" >
-
-    <option value="Herramientas de monitoreo">Herramientas de monitoreo</option>
-    <option value="Analista de confiabilidad">Analista de confiabilidad</option>
-    <option value="Analista de soporte/Stand by">Analista de soporte/Stand by</option>
-    <option value="Torre de control">Torre de control</option>
-    <option value="Pruebas manuales CGM">Pruebas manuales CGM</option>
-    <option value="Proveedor/aliado">Proveedor/aliado</option>
-    <option value="Otros">Otros</option>
-  </select>
-  <div class="invalid-feedback">Por favor, seleccione quién detectó el problema.</div>
-</div>
+      
 
 <!-- Causado por certificado, OC -->
 <div class="mb-3">
@@ -81,58 +82,78 @@
 </div>
 
 
-<!-- Atribuible a -->
-<div class="mb-3">
-  <label for="atribuible_a" class="form-label"><strong>Atribuible a</strong></label>
-  <select class="form-select" id="atribuible_a" name="atribuible_a" >
-    <option value="EVC">EVC</option>
-    <option value="Cloud">Cloud</option>
-    <option value="Base de datos">Base de datos</option>
-    <option value="ISERIES">ISERIES</option>
-    <option value="Ciberseguridad">Ciberseguridad</option>
-    <option value="Plataformas distribuidas">Plataformas distribuidas</option>
-    <option value="Telecomunicaciones">Telecomunicaciones</option>
-    <option value="Integracion">Integración</option>
-    <option value="SOA">SOA</option>
-    <option value="Pseries">Pseries</option>
-    <option value="Usuarios">Usuarios</option>
-    <option value="Aliados">Aliados</option>
-    <option value="Sin definir">Sin definir</option>
-  </select>
-  <div class="invalid-feedback">Por favor, seleccione a quién es atribuible.</div>
+<div class="mb-3 d-flex">
+  <!-- Atribuible a -->
+  <div class="me-4 w-75">
+    <label for="atribuible_a" class="form-label"><strong>Atribuible a</strong></label>
+    <select class="form-select" id="atribuible_a" name="atribuible_a">
+      <option value="EVC">EVC</option>
+      <option value="Cloud">Cloud</option>
+      <option value="Base de datos">Base de datos</option>
+      <option value="ISERIES">ISERIES</option>
+      <option value="Ciberseguridad">Ciberseguridad</option>
+      <option value="Plataformas distribuidas">Plataformas distribuidas</option>
+      <option value="Telecomunicaciones">Telecomunicaciones</option>
+      <option value="Integracion">Integración</option>
+      <option value="SOA">SOA</option>
+      <option value="Pseries">Pseries</option>
+      <option value="Usuarios">Usuarios</option>
+      <option value="Aliados">Aliados</option>
+      <option value="Sin definir">Sin definir</option>
+    </select>
+    <div class="invalid-feedback">Por favor, seleccione a quién es atribuible.</div>
+  </div>
+
+  <!-- Tipo de Falla -->
+  <div class="me-4 w-75">
+    <label for="tipo_de_falla" class="form-label"><strong>Tipo de Falla</strong></label>
+    <select class="form-select" id="tipo_de_falla" name="tipo_de_falla">
+      <option>----</option>
+      <option value="Parcial">Parcial</option>
+      <option value="Total">Total</option>
+    </select>
+    <div class="invalid-feedback">Por favor, seleccione el tipo de falla.</div>
+  </div>
+
+  <!-- Tipo Causa -->
+  <div class="w-75">
+    <label for="tipo_causa" class="form-label"><strong>Tipo Causa</strong></label>
+    <select class="form-select" id="tipo_causa" name="tipo_causa">
+      <option>----</option>
+      <option value="En investigacion">En investigación</option>
+      <option value="Encontrado">Encontrado</option>
+      <option value="No encontrado">No encontrado</option>
+    </select>
+    <div class="invalid-feedback">Por favor, seleccione el tipo de causa.</div>
+  </div>
 </div>
 
 
-<!-- Tipo de Falla -->
-<div class="mb-3">
-  <label for="tipo_de_falla" class="form-label"><strong>Tipo de Falla</strong></label>
-  <select class="form-select" id="tipo_de_falla" name="tipo_de_falla" >
-    <option >----</option>
-    <option value="Parcial">Parcial</option>
-    <option value="Total">Total</option>
-  </select>
-  <div class="invalid-feedback">Por favor, seleccione el tipo de falla.</div>
+
+
+
+
+<div class="mb-3 d-flex">
+  <!-- Detalle -->
+  <div class="me-3 w-50">
+    <label for="detalle" class="form-label"><strong>Detalle</strong></label>
+    <textarea class="form-control" id="detalle" name="detalle" rows="3"></textarea>
+    <div class="invalid-feedback">Por favor, describa el detalle.</div>
+  </div>
+
+  <!-- Tipo Causa -->
+  <div class="w-50">
+    <label for="tipo_causa" class="form-label"><strong>Tipo Causa</strong></label>
+    <select class="form-select" id="tipo_causa" name="tipo_causa">
+      <option>----</option>
+      <option value="En investigacion">En investigación</option>
+      <option value="Encontrado">Encontrado</option>
+      <option value="No encontrado">No encontrado</option>
+    </select>
+    <div class="invalid-feedback">Por favor, seleccione el tipo de causa.</div>
+  </div>
 </div>
 
-
-      <!-- Detalle -->
-      <div class="mb-3">
-        <label for="detalle" class="form-label"><strong>Detalle</strong></label>
-        <textarea class="form-control" id="detalle" name="detalle" rows="3"  ></textarea>
-        <div class="invalid-feedback">Por favor, describa el detalle.</div>
-      </div>
-
-   <!-- Tipo Causa -->
-<div class="mb-3">
-  <label for="tipo_causa" class="form-label"><strong>Tipo Causa</strong></label>
-  <select class="form-select" id="tipo_causa" name="tipo_causa" >
-    <option >----</option>
-    <option value="En investigacion">En investigación</option>
-    <option value="Encontrado">Encontrado</option>
-    <option value="No encontrado">No encontrado</option>
-  </select>
-  <div class="invalid-feedback">Por favor, seleccione el tipo de causa.</div>
-</div>
 
 
       <!-- Causa -->
@@ -165,15 +186,20 @@
 
 
   <!-- Fecha iniciar y final -->
-<div class="mb-3">
-  <label for="fecha_hora_inicial" class="form-label"><strong>Fecha y Hora Inicial</strong></label>
-  <input type="datetime-local" class="form-control d-inline w-auto me-3" id="fecha_hora_inicial" name="fecha_hora_inicial" required>
-  
-  <label for="fecha_hora_final" class="form-label"><strong>Fecha y Hora Final</strong></label>
-  <input type="datetime-local" class="form-control d-inline w-auto" id="fecha_hora_final" name="fecha_hora_final" required>
-  
-  <div class="invalid-feedback">Por favor, complete las fechas y horas requeridas.</div>
+<!-- Fecha iniciar y final -->
+<div class="mb-3 row">
+  <div class="col-md-5">
+    <label for="fecha_hora_inicial">Fecha y Hora Inicial:</label>
+<input type="datetime-local" class="form-control" id="fecha_hora_inicial" name="fecha_hora_inicial" value="{{ fecha_hora_mejora|date:'Y-m-d\TH:i' }}" >
+  </div>
+
+  <div class="col-md-5">
+    <label for="fecha_hora_final" class="form-label"><strong>Fecha y Hora Final</strong></label>
+    <input type="datetime-local" class="form-control" id="fecha_hora_final" name="fecha_hora_final" >
+  </div>
 </div>
+<div class="invalid-feedback">Por favor, complete las fechas y horas requeridas.</div>
+
 
 
 
