@@ -11,13 +11,32 @@
 
     <style>
         .contact-form {
-            background: #cadbfa;
+            background: #d4d5d6;
+            position: relative;
             margin-top: 10%;
             margin-bottom: 5%;
-            width: 80%;
-            height: 80%;
+            width: 90%;
+            height: 85%;
+            
         }
-
+        
+            .contact-form::before {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 800px; /* Aumenta el tamaño */
+                height: 800px;
+               
+                background-size: contain; /* O usa cover si quieres que ocupe todo */
+                opacity: 0.2;
+                pointer-events: none;
+            }
+  
+        
+        
+        
         .contact-image {
             text-align: center;
         }
@@ -104,11 +123,11 @@
                             <label  class="form-label"><strong>Tipo de Mejora</strong></label>
                             <select name="tipo_de_mejora" id="tipo_de_mejora" class="form-select" required>
                                 <option value="---">---</option>
-                                <option value="Alerta_falla_masiva">Alerta falla masiva</option>
-                                <option value="Correccion_variable">Corrección variable</option>
-                                <option value="Corregir_umbrales_de_monitoreo">Corregir umbrales de monitoreo</option>
-                                <option value="mejoras_al_monitoreo_de_un_servicio">Mejoras al monitoreo de un servicio</option>
-                                <option value="variable_o_servicio_eliminado">Variable o servicio eliminado</option>
+                                <option value="Alerta falla masiva">Alerta falla masiva</option>
+                                <option value="Correccion variable">Corrección variable</option>
+                                <option value="Corregir umbrales de monitoreo">Corregir umbrales de monitoreo</option>
+                                <option value="mejoras al monitoreo de un servicio">Mejoras al monitoreo de un servicio</option>
+                                <option value="variable o servicio eliminado">Variable o servicio eliminado</option>
                             </select>
                         </div>
                         <div class="col">

@@ -65,14 +65,22 @@
             <i class="fa-solid fa-folder-open"></i>  Gestiones
           </a>
         </li>
-        <li class="nav-item">
-          <a href="{% url 'listar_mejora' %}" class="nav-link text-white" aria-current="page">
-            <svg class="bi pe-none me-2" width="16" height="16">
-              <use xlink:href="#mejoras CGM" />
-            </svg>
-            <i class="fa-solid fa-arrow-up-right-dots"></i> Mejoras CGM
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white" href="#" id="mejorasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <svg class="bi pe-none me-2" width="16" height="16">
+                  <use xlink:href="#mejoras_CGM" />
+              </svg>
+              <i class="fa-solid fa-arrow-up-right-dots"></i> Mejoras CGM
           </a>
-        </li>
+          <ul class="dropdown-menu" aria-labelledby="mejorasDropdown">
+            <li><a class="dropdown-item" href="{% url 'listar_mejora' %}">Listar Mejora</a></li>
+              <li><a class="dropdown-item" href="{% url 'crear_mejora' %}">Crear Mejora</a></li>
+              <li><a class="dropdown-item" href="{% url 'listar_mejoras_cerradas' %}">Mejoras cerradas</a></li>
+
+             
+          </ul>
+      </li>
+      
       </ul>
       <hr>
       <div class="dropdown">
@@ -98,7 +106,12 @@
     <!-- img src="{% static 'images/logofondo.png' %}" alt="imagen fondo"> -->
 
 
-
+  </main>
+  <footer id="footer">
+    <div class="container">
+        <p>Última actualización: <strong>{% now "d/m/Y H:i:s" %}</strong></p>
+    </div>
+  </footer>
 
 </body>
   

@@ -70,9 +70,12 @@
     <tbody>
       {% for mejora in page_obj %}
       <tr>
-       <td>   <a href="{% url 'editar_mejora' mejora.id %}">
-         {{ mejora.servicio }}
-      </a>
+        <td>
+            <a href="{% url 'editar_mejora' mejora.id %}" style="text-decoration: none;">
+                {{ mejora.servicio }}
+            </a>
+        </td>
+    
         <td>{{ mejora.herramienta_de_monitoreo }}</td>
         <td>{{ mejora.tipo_de_mejora }}</td>
         <td>{{ mejora.numero_peticion }}</td>

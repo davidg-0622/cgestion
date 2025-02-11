@@ -7,12 +7,13 @@
 body {
     background-color: rgb(245, 244, 244);
     margin: 0; /* Asegura que no haya márgenes inesperados */
-    background-image: url("{% static 'images/logofondo.png' %}");
+    background: url("{% static 'images/logofondo.png' %}") no-repeat center;
     /* Ruta a la imagen */
 }
 
 html {
     height: -webkit-fill-available;
+    background: url("{% static 'images/logofondo.png' %}") no-repeat center;
 }
 
 

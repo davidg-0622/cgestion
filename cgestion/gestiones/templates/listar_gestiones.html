@@ -22,14 +22,43 @@
         </div>
     {% endfor %}
 {% endif %}
-<!-- Formulario para búsqueda -->
+<br>
+<div class="d-flex justify-content-end">
+  <a href="{% url 'creargestion' %}" class="btn btn-success">
+    <span class="fw-bold fs-5">+</span> Crear Gestión
+  </a>
+</div>
+
+
+<!-- Formulario de búsqueda con filtro de fechas -->
 <form method="GET" action="{% url 'listar_gestiones' %}">
-  <!-- Campo de búsqueda con menor ancho -->
-  <div class="input-group my-3 mx-2">
-    <input type="text" name="q" class="form-control form-control-sm" style="width: 150px;" placeholder="Buscar gestiones..." value="{{ query|default:'' }}">
-    <button type="submit" class="btn btn-primary btn-sm">Buscar</button>
+  <div class="row g-2 align-items-center">
+    <!-- Campo de búsqueda (Más grande) -->
+    <div class="col-md-4">
+      <input type="text" name="q" class="form-control form-control" 
+             style="width: 100%;" placeholder="Buscar..." 
+             value="{{ query|default:'' }}">
+    </div>
+
+    <!-- Fecha de inicio -->
+    <div class="col-md-2">
+      <input type="date" name="fecha_inicio" class="form-control form-control" value="{{ fecha_inicio }}">
+    </div>
+
+    <!-- Fecha de fin -->
+    <div class="col-md-2">
+      <input type="date" name="fecha_fin" class="form-control form-control" value="{{ fecha_fin }}">
+    </div>
+
+    <!-- Botón de búsqueda (Más grande) -->
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary ">🔍 Buscar</button>
+    </div>
   </div>
 </form>
+<br>
+
+
 
 <form method="GET" action="{% url 'descargar_gestiones' %}">
   <div class="d-flex justify-content-between">
@@ -40,15 +69,14 @@
     <table class="table table-striped table-bordered table-hover">
       <thead class="table-dark">
         <tr>
-          <th class="text-center">Seleccionar</th>
+          <th class="text-center">-</th>
           <th class="text-center">Número Caso</th>
+          <th class="text-center">Servicio</th>
           <th class="text-center">Detalle</th>
           <th class="text-center">Solución</th>
-          <th class="text-center">Servicio</th>
           <th class="text-center">Responsables</th>
           <th class="text-center">Fecha y Hora Inicial</th>
           <th class="text-center">Fecha y Hora Final</th>
-          <th class="text-center">AMG</th>
           <th class="text-center">GIOTI</th>
         </tr>
       </thead>
@@ -64,19 +92,14 @@
               {{ gestion.numero_caso }}
             </a>
           </td>
+          <td>{{ gestion.servicio }}</td>
           <td>{{ gestion.detalle }}</td>
           <td>{{ gestion.solucion }}</td>
-          <td>{{ gestion.servicio }}</td>
+         
           <td>{{ gestion.responsable_gioti }}</td>
           <td>{{ gestion.fecha_hora_inicial }}</td>
           <td>{{ gestion.fecha_hora_final }}</td>
-          <td>
-            {% if gestion.postular_amg %}
-              <span class="badge bg-success">Sí</span>
-            {% else %}
-              <span class="badge bg-danger">No</span>
-            {% endif %}
-          </td>
+         
           <td>
             {% if gestion.gioti %}
               <span class="badge bg-success">Sí</span>

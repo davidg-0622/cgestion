@@ -28,7 +28,7 @@ urlpatterns = [
     path('registro_usuario/', views.register_page, name='registro_usuario'),
     path('login/', views.login_page, name='login'),
     path('logout/', views.logout_view, name='logout'),
-    path('enviar-email/', views.enviar_gestion_email, name='enviar_email'),
+    path('enviar-email/<int:gestion_id>', views.enviar_gestion_email, name='enviar_email'),
     path('descargar_gestiones/', views.descargar_gestiones, name='descargar_gestiones'),
    
 

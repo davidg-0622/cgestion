@@ -75,48 +75,67 @@ def creargestion(request):
 
 ################################# listar gestion #######################################
 
-
-
-
-
-
+from datetime import datetime, timedelta
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import render
+from .models import Gestion
 
 def listar_gestiones(request):
     # Obtener el nombre del usuario autenticado (o "Invitado" si no está autenticado)
     first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
-    # Obtener el término de búsqueda desde los parámetros GET
-    query = request.GET.get('q', '')
+    
+    # Obtener los parámetros GET
+    query = request.GET.get('q', '').strip()
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_fin = request.GET.get('fecha_fin')
 
-    # Filtrar las gestiones basadas en el término de búsqueda
-    gestiones = Gestion.objects.filter(
-        Q(numero_caso__icontains=query) |
-        Q(detalle__icontains=query) |
-        Q(solucion__icontains=query) |
-        Q(servicio__icontains=query) |
-        Q(tipo_de_gestion__icontains=query) |
-        Q(detectada_por__icontains=query) |
-        Q(causado_por_certificado_digital__icontains=query) |
-        Q(incidente_generado_por_OC__icontains=query) |
-        Q(atribuible_a__icontains=query) |
-        Q(tipo_de_falla__icontains=query) |
-        Q(tipo_causa__icontains=query) |
-        Q(causa__icontains=query) |
-        Q(validaciones__icontains=query) |
-        Q(responsable_gioti__icontains=query)
-    ).order_by('-id')
+    # Obtener todas las gestiones
+    gestiones = Gestion.objects.all()
 
-    # Configurar el paginador (10 registros por página)
+    # Filtrar por término de búsqueda si existe
+    if query:
+        gestiones = gestiones.filter(
+            Q(numero_caso__icontains=query) |
+            Q(detalle__icontains=query) |
+            Q(solucion__icontains=query) |
+            Q(servicio__icontains=query) |
+            Q(tipo_de_gestion__icontains=query) |
+            Q(detectada_por__icontains=query) |
+            Q(causado_por_certificado_digital__icontains=query) |
+            Q(incidente_generado_por_OC__icontains=query) |
+            Q(atribuible_a__icontains=query) |
+            Q(tipo_de_falla__icontains=query) |
+            Q(tipo_causa__icontains=query) |
+            Q(causa__icontains=query) |
+            Q(validaciones__icontains=query) |
+            Q(responsable_gioti__icontains=query) |
+            Q(fecha_hora_inicial__icontains=query) |
+            Q(fecha_hora_final__icontains=query)
+        )
+
+    # Convertir las fechas a datetime y filtrar por fechas si están presentes
+    if fecha_inicio:
+        fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d")
+        gestiones = gestiones.filter(fecha_hora_inicial__gte=fecha_inicio)
+    
+    if fecha_fin:
+        fecha_fin = datetime.strptime(fecha_fin, "%Y-%m-%d") + timedelta(days=1)
+        gestiones = gestiones.filter(fecha_hora_final__lt=fecha_fin)
+
+    # Configurar la paginación (10 registros por página)
     paginator = Paginator(gestiones, 10)
-
-    # Obtener el número de página actual desde los parámetros GET
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    # Pasar las gestiones paginadas y el término de búsqueda al contexto
-    return render(request, "listar_gestiones.html", {"page_obj": page_obj, "query": query , "first_name": first_name})
-
-
-
+    # Renderizar la plantilla con los datos
+    return render(request, "listar_gestiones.html", {
+        "page_obj": page_obj,
+        "query": query,
+        "first_name": first_name,
+        "fecha_inicio": request.GET.get('fecha_inicio', ''),  # Mantiene el valor en la vista
+        "fecha_fin": request.GET.get('fecha_fin', '')  # Mantiene el valor en la vista
+    })
 
 
 
@@ -238,30 +257,31 @@ def logout_view(request):
 
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Gestion
 
-def enviar_gestion_email(request):
-    # Obtener todas las gestiones
-    gestiones = Gestion.objects.all()
+def enviar_gestion_email(request, gestion_id):
+    # Obtener la gestión editada
+    gestion = get_object_or_404(Gestion, id=gestion_id)
 
-    # Renderizar la tabla como HTML
-    contenido_html = render_to_string('email_template.html', {'gestiones': gestiones})
-  
+    # Renderizar la tabla como HTML solo con esta gestión
+    contenido_html = render_to_string('email_template.html', {'gestiones': [gestion]})
+
     # Configurar el correo
-    subject = "Reporte de Gestiones CGM "
+    subject = "Reporte de Gestión Editada"
     from_email = "davidg06.buitrago@gmail.com"
-    recipient_list = ["davidg06.buitrago@gmail.com"]  # Cambia esto
+    recipient_list = ["davidg06.buitrago@gmail.com"]  
 
     # Crear el correo con contenido HTML
     email = EmailMessage(subject, contenido_html, from_email, recipient_list)
-    email.content_subtype = "html"  # Indicar que es un email en HTML
+    email.content_subtype = "html"  
 
     try:
         email.send()
         return render(request, 'success.html', {'mensaje': 'Correo enviado correctamente'})
     except Exception as e:
         return render(request, 'error.html', {'mensaje': f'Error al enviar correo: {str(e)}'})
+
 
 
 ##############################descagar gestiones ######################################3
