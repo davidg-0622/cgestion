@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import Gestion
-
-
+from mejorascgm.models import Mejoracgm
 
 
 from django.contrib import admin
@@ -37,3 +36,12 @@ admin.site.site_header = title  # Título en la cabecera del admin
 admin.site.site_title = title   # Título en la pestaña del navegador
 
 admin.site.index_title = "Monitoreo"  # Título de la página de índice 
+
+
+class MejorasAdmin(admin.ModelAdmin):
+    readonly_fields = ('mejora_creada_por',)
+    list_display = ('servicio', 'herramienta_de_monitoreo', 'tipo_de_mejora', 'numero_peticion', 'numero_wo', 'servidor','variable', 'peticion_reincidente', 'peticion_anterior', 'observaciones','fecha_hora_mejora', 'area_responsable', 'mejora_creada_por', 'estado', 'solucion', 'fecha_hora'  )  # Reemplaza con los campos que quieras mostrar
+    search_fields = ('servicio', 'herramienta_de_monitoreo', 'tipo_de_mejora', 'numero_peticion', 'numero_wo', 'servidor','variable', 'peticion_reincidente', 'peticion_anterior', 'observaciones','fecha_hora_mejora', 'area_responsable', 'mejora_creada_por', 'estado', 'solucion', 'fecha_hora')  # Campos por los que se puede buscar
+    list_filter = ('servicio', 'herramienta_de_monitoreo', 'tipo_de_mejora','numero_peticion', 'numero_wo','fecha_hora_mejora', 'fecha_hora')  # Filtros opcionales
+
+admin.site.register(Mejoracgm, MejorasAdmin)

@@ -1,12 +1,11 @@
 from django import forms
-from django.core import validators
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 class RegisterForm(UserCreationForm):
     # Validación personalizada para el campo de correo electrónico
     email = forms.EmailField(
-        required=True, 
+        required=True,
         widget=forms.EmailInput(attrs={'class': 'form-control'})
     )
 

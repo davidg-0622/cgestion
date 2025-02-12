@@ -22,7 +22,7 @@ class Mejoracgm(models.Model):
     mejora_creada_por = models.CharField(max_length=250, verbose_name='Mejora Creada Por')
     estado = models.CharField(max_length=250, verbose_name='Estado')
     solucion = models.TextField(verbose_name='Descripción')
-    fecha_hora = models.DateTimeField(null=True, blank=True)
+    fecha_hora = models.DateTimeField(null=True, blank=True, verbose_name='fecha y hora de cierre de la mejora')
 
     def __str__(self):
        return (
@@ -33,6 +33,8 @@ class Mejoracgm(models.Model):
            f"{self.estado} - {self.solucion} - {self.fecha_hora}"
        )
 
-
+    class Meta:
+        verbose_name_plural = 'Mejoras CGM'
+        verbose_name = 'Mejora CGM'
 
 
