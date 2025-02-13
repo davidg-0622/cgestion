@@ -30,7 +30,8 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('enviar-email/<int:gestion_id>', views.enviar_gestion_email, name='enviar_email'),
     path('descargar_gestiones/', views.descargar_gestiones, name='descargar_gestiones'),
-   
+    path('listar_gestiones_en_investigacion/', views.listar_gestiones_en_investigacion, name='listar_gestiones_en_investigacion'),
+    path('grafico/', views.grafico_gestiones, name='grafico_gestiones'),
 
 
     ######## urls de mejorascgm#####

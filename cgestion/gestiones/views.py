@@ -3,12 +3,15 @@ from gestiones.models import Gestion, Servicio
 from django.contrib.auth.forms import UserCreationForm
 from gestiones.forms import RegisterForm
 from django.shortcuts import redirect
-from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.db.models import Q
-from datetime import datetime
 from django.utils import timezone
+from datetime import datetime, timedelta
+from django.core.paginator import Paginator
+from django.db.models import Q
+import csv
+import openpyxl
+from django.http import HttpResponse
 
 
 
@@ -23,22 +26,22 @@ def creargestion(request):
 
     if request.method == "POST":
         # Obtener datos del formulario
-        servicio = request.POST.get("servicio")
-        tipo_de_gestion = request.POST.get("tipo_de_gestion")
-        numero_caso = request.POST.get("numero_caso")
-        detectada_por = request.POST.get("detectada_por")
+        servicio = request.POST.get("servicio") or None
+        tipo_de_gestion = request.POST.get("tipo_de_gestion")or None
+        numero_caso = request.POST.get("numero_caso") or None
+        detectada_por = request.POST.get("detectada_por") or None
         causado_por_certificado_digital = request.POST.get("causado_por_certificado_digital") == "on"
-        incidente_generado_por_OC = request.POST.get("incidente_generado_por_OC") == "on"
-        atribuible_a = request.POST.get("atribuible_a")
-        tipo_de_falla = request.POST.get("tipo_de_falla")
+        incidente_generado_por_OC = request.POST.get("incidente_generado_por_OC") == "on" 
+        atribuible_a = request.POST.get("atribuible_a") or None
+        tipo_de_falla = request.POST.get("tipo_de_falla")or None
         detalle = request.POST.get("detalle")
-        tipo_causa = request.POST.get("tipo_causa")
+        tipo_causa = request.POST.get("tipo_causa") or None
         causa = request.POST.get("causa")
         validaciones = request.POST.get("validaciones")
         solucion = request.POST.get("solucion")
         responsable_gioti = request.POST.get("responsable_gioti")
         fecha_hora_inicial = request.POST.get("fecha_hora_inicial") or timezone.now()  # Si no se envía, usa la fecha actual
-        fecha_hora_final = request.POST.get("fecha_hora_final")
+        fecha_hora_final = request.POST.get("fecha_hora_final") or None
         postular_amg = request.POST.get("postular_amg") == "on"
         gioti = request.POST.get("gioti") == "on"
 
@@ -75,11 +78,7 @@ def creargestion(request):
 
 ################################# listar gestion #######################################
 
-from datetime import datetime, timedelta
-from django.core.paginator import Paginator
-from django.db.models import Q
-from django.shortcuts import render
-from .models import Gestion
+
 
 def listar_gestiones(request):
     # Obtener el nombre del usuario autenticado (o "Invitado" si no está autenticado)
@@ -88,7 +87,7 @@ def listar_gestiones(request):
     # Obtener los parámetros GET
     query = request.GET.get('q', '').strip()
     fecha_inicio = request.GET.get('fecha_inicio')
-    fecha_fin = request.GET.get('fecha_fin')
+    fecha_fin = request.GET.get('fecha_fin') 
 
     # Obtener todas las gestiones
     gestiones = Gestion.objects.all()
@@ -168,7 +167,7 @@ def editar_gestion(request, id):
         solucion = request.POST.get('solucion')
         responsable_gioti = request.POST.get('responsable_gioti')
         fecha_hora_inicial = request.POST.get('fecha_hora_inicial')
-        fecha_hora_final = request.POST.get('fecha_hora_final')
+        fecha_hora_final = request.POST.get('fecha_hora_final') or None 
         postular_amg = 'postular_amg' in request.POST
         gioti = 'gioti' in request.POST
 
@@ -208,7 +207,7 @@ def editar_gestion(request, id):
     return render(request, 'editar_gestion.html', {'gestion': gestion, "first_name":first_name,'fecha_hora_actual': fecha_hora_actual})
 
 
-
+#################
 
 
 
@@ -226,7 +225,7 @@ def register_page(request):
     
     return render(request, 'users/register.html', {'register_form': register_form})
 
-
+##############################funcion de login ####################################
 
 def login_page(request):
     if request.method == "POST":
@@ -245,7 +244,7 @@ def login_page(request):
     return render(request, 'users/login.html', {'title': 'Login'})
 
 
-
+##################funcion de logout###################################
 
 def logout_view(request):
     logout(request)  # Cierra la sesión del usuario
@@ -253,7 +252,7 @@ def logout_view(request):
 
 
 
-##########################enviar email ###################
+##########################enviar email #########################################
 
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -284,11 +283,8 @@ def enviar_gestion_email(request, gestion_id):
 
 
 
-##############################descagar gestiones ######################################3
-import csv
-import openpyxl
-from django.http import HttpResponse
-from .models import Gestion
+##############################descagar gestiones ######################################
+
 
 def descargar_gestiones(request):
     # Obtener los IDs seleccionados desde el formulario
@@ -396,3 +392,97 @@ def descargar_gestiones(request):
         wb.save(response)
 
     return response
+
+
+
+
+
+#############################Listar casos en investigacion #################################
+
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from django.db.models import Q
+from .models import Gestion
+
+def listar_gestiones_en_investigacion(request):
+    first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
+    query = request.GET.get('q', '')
+
+
+    # Construcción del filtro
+    gestion = Gestion.objects.filter(tipo_causa="En investigacion").filter(
+        Q(servicio__icontains=query) |
+        Q(tipo_de_gestion__icontains=query) |
+        Q(numero_caso__icontains=query) |
+        Q(detectada_por__icontains=query) |
+        Q(causado_por_certificado_digital__icontains=query) |
+        Q(incidente_generado_por_OC__icontains=query) |
+        Q(atribuible_a__icontains=query) |
+        Q(tipo_de_falla__icontains=query) |
+        Q(detalle__icontains=query) |
+        Q(tipo_causa__icontains=query) |
+        Q(causa__icontains=query) |
+        Q(validaciones__icontains=query) |
+        Q(solucion__icontains=query) |
+        Q(responsable_gioti=query) |
+        Q(fecha_hora_inicial__icontains=query) |
+        Q(fecha_hora_final__icontains=query)
+    )
+
+    gestion = gestion.order_by('-fecha_hora_inicial')
+
+    # Paginación
+    paginator = Paginator(gestion, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+
+    return render(request, "listar_gestiones_investigacion.html", {
+        "page_obj": page_obj,
+        "query": query,
+        "first_name": first_name
+    })
+
+
+#######################crear grafico con la data gestion ##########################
+import seaborn as sns
+import matplotlib.pyplot as plt
+import pandas as pd
+import io
+import base64
+from django.http import HttpResponse
+from django.db.models import Count
+from .models import Gestion
+
+def grafico_gestiones(request):
+    # Obtener los datos agrupados por responsable_gioti
+    gestiones = Gestion.objects.values('responsable_gioti').annotate(total_casos=Count('numero_caso'))
+
+    # Convertir a DataFrame
+    df = pd.DataFrame(list(gestiones))
+
+    # Verificar si hay datos
+    if df.empty:
+        return HttpResponse("No hay datos para mostrar el gráfico.")
+
+    # Crear el gráfico
+    plt.figure(figsize=(10, 5))
+    sns.barplot(x='responsable_gioti', y='total_casos', data=df, palette='Blues_r')
+    plt.title('Cantidad de Casos por Responsable GIOTI')
+    plt.xlabel('Responsable GIOTI')
+    plt.ylabel('Número de Casos')
+    plt.xticks(rotation=45)
+
+    # Guardar el gráfico en memoria
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plt.close()
+
+    # Convertir la imagen a base64
+    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    buffer.close()
+
+    return HttpResponse(f'<img src="data:image/png;base64,{image_base64}" />')
+
+

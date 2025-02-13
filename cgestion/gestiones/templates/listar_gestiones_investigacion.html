@@ -31,23 +31,23 @@
 
 
 <!-- Formulario de búsqueda con filtro de fechas -->
-<form method="GET" action="{% url 'listar_gestiones' %}">
+<form method="GET" action="{% url 'listar_gestiones_en_investigacion' %}">
   <div class="row g-2 align-items-center">
     <!-- Campo de búsqueda (Más grande) -->
     <div class="col-md-4">
       <input type="text" name="q" class="form-control form-control" 
-             style="width: 100%;" placeholder="Buscar..." 
+             style="width: 90%;" placeholder="Buscar..." 
              value="{{ query|default:'' }}">
     </div>
 
     <!-- Fecha de inicio -->
     <div class="col-md-2">
-      <input type="date" name="fecha_inicio" class="form-control form-control" value="{{ fecha_inicio }}">
+      <input type="date" name="fecha_inicio" class="form-control form-control" value="{{ fecha_hora_inicial }}">
     </div>
 
     <!-- Fecha de fin -->
     <div class="col-md-2">
-      <input type="date" name="fecha_fin" class="form-control form-control" value="{{ fecha_fin }}">
+      <input type="date" name="fecha_fin" class="form-control form-control" value="{{ fecha_hora_final }}">
     </div>
 
     <!-- Botón de búsqueda (Más grande) -->
@@ -70,14 +70,23 @@
       <thead class="table-dark">
         <tr>
           <th class="text-center">-</th>
-          <th class="text-center">Número Caso</th>
+          <th class="text-center">numero_caso</th>
+          <th class="text-center">tipo_causa</th>
+          <th class="text-center">responsable_gioti</th>
           <th class="text-center">Servicio</th>
-          <th class="text-center">Detalle</th>
-          <th class="text-center">Solución</th>
-          <th class="text-center">Responsables</th>
-          <th class="text-center">Fecha y Hora Inicial</th>
-          <th class="text-center">Fecha y Hora Final</th>
-          <th class="text-center">GIOTI</th>
+          <th class="text-center">tipo_de_gestion</th>
+          <th class="text-center">detectada_por</th>
+          <th class="text-center">causado_por_certificado_digital</th>
+          <th class="text-center">incidente_generado_por_OC</th>
+          <th class="text-center">atribuible_a</th>
+          <th class="text-center">tipo_de_falla</th>
+          <th class="text-center">detalle</th>
+          <th class="text-center">causa</th>
+          <th class="text-center">validaciones</th>
+          <th class="text-center">solucion</th>
+          <th class="text-center">fecha_hora_inicial</th>
+          <th class="text-center">fecha_hora_final</th>
+          <th class="text-center">gioti</th>
         </tr>
       </thead>
       <tbody>
@@ -92,14 +101,33 @@
               {{ gestion.numero_caso }}
             </a>
           </td>
-          <td>{{ gestion.servicio }}</td>
-          <td>{{ gestion.detalle }}</td>
-          <td>{{ gestion.solucion }}</td>
-         
+          <td>{{ gestion.tipo_causa }}</td>
           <td>{{ gestion.responsable_gioti }}</td>
+          <td>{{ gestion.servicio }}</td>
+          <td>{{ gestion.tipo_de_gestion }}</td>
+          <td>{{ gestion.detectada_por }}</td>
+          <td>
+            {% if gestion.causado_por_certificado_digital %}
+              <span class="badge bg-success">Sí</span>
+            {% else %}
+              <span class="badge bg-danger">No</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if gestion.incidente_generado_por_OC %}
+              <span class="badge bg-success">Sí</span>
+            {% else %}
+              <span class="badge bg-danger">No</span>
+            {% endif %}
+          </td>
+          <td>{{ gestion.atribuible_a }}</td>
+          <td>{{ gestion.tipo_de_falla }}</td>
+          <td>{{ gestion.detalle }}</td>
+          <td>{{ gestion.causa }}</td>
+          <td>{{ gestion.validaciones }}</td>
+          <td>{{ gestion.solucion }}</td>
           <td>{{ gestion.fecha_hora_inicial }}</td>
           <td>{{ gestion.fecha_hora_final }}</td>
-         
           <td>
             {% if gestion.gioti %}
               <span class="badge bg-success">Sí</span>
@@ -163,3 +191,4 @@
 
 
 {% endblock %}
+

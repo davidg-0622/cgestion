@@ -45,7 +45,7 @@
             <!-- Tipo de Gestión -->
             <div class="col-md-3">
               <label for="tipo_de_gestion" class="form-label"><strong>Tipo de Gestión</strong></label>
-              <select class="form-select" id="tipo_de_gestion" name="tipo_de_gestion" required>
+              <select class="form-select" id="tipo_de_gestion" name="tipo_de_gestion" >
                 <option value="" disabled selected>Seleccione el tipo de gestión</option>
                 <option value="Evento" {% if gestion.tipo_de_gestion == 'Evento' %}selected{% endif %}>Evento</option>
                 <option value="Incidente" {% if gestion.tipo_de_gestion == 'Incidente' %}selected{% endif %}>Incidente</option>
@@ -64,7 +64,7 @@
             <!-- Detectada Por -->
             <div class="col-md-3">
               <label for="detectada_por" class="form-label"><strong>Detectada Por</strong></label>
-              <select class="form-select" id="detectada_por" name="detectada_por" required>
+              <select class="form-select" id="detectada_por" name="detectada_por" >
                 <option value="">Seleccione quién detectó el problema</option>
                 <option value="Herramientas de monitoreo" {% if gestion.detectada_por == 'Herramientas de monitoreo' %}selected{% endif %}>Herramientas de monitoreo</option>
                 <option value="Analista de confiabilidad" {% if gestion.detectada_por == 'Analista de confiabilidad' %}selected{% endif %}>Analista de confiabilidad</option>
@@ -97,7 +97,7 @@
   <!-- Atribuible a -->
   <div class="col-md-4">
     <label for="atribuible_a" class="form-label"><strong>Atribuible a</strong></label>
-    <select class="form-select" id="atribuible_a" name="atribuible_a" required>
+    <select class="form-select" id="atribuible_a" name="atribuible_a" >
       <option value="" disabled selected>Seleccione a quién es atribuible</option>
       <option value="EVC" {% if gestion.atribuible_a == 'EVC' %}selected{% endif %}>EVC</option>
       <option value="Cloud" {% if gestion.atribuible_a == 'Cloud' %}selected{% endif %}>Cloud</option>
@@ -120,8 +120,8 @@
   <!-- Tipo de Falla -->
   <div class="col-md-4">
     <label for="tipo_de_falla" class="form-label"><strong>Tipo de Falla</strong></label>
-    <select class="form-select" id="tipo_de_falla" name="tipo_de_falla" required>
-      <option value="" disabled selected>Seleccione el tipo de falla</option>
+    <select class="form-select" id="tipo_de_falla" name="tipo_de_falla" >
+      <option value="" disabled selected>----</option>
       <option value="Parcial" {% if gestion.tipo_de_falla == 'Parcial' %}selected{% endif %}>Parcial</option>
       <option value="Total" {% if gestion.tipo_de_falla == 'Total' %}selected{% endif %}>Total</option>
     </select>
@@ -131,8 +131,8 @@
   <!-- Tipo Causa -->
   <div class="col-md-4">
     <label for="tipo_causa" class="form-label"><strong>Tipo Causa</strong></label>
-    <select class="form-select" id="tipo_causa" name="tipo_causa">
-      <option value="" disabled selected>Seleccione el tipo de causa</option>
+    <select class="form-select" id="tipo_causa" name="tipo_causa" >
+      <option value="" disabled selected>----</option>
       <option value="En investigacion" {% if gestion.tipo_causa == 'En investigacion' %}selected{% endif %}>En investigación</option>
       <option value="Encontrado" {% if gestion.tipo_causa == 'Encontrado' %}selected{% endif %}>Encontrado</option>
       <option value="No encontrado" {% if gestion.tipo_causa == 'No encontrado' %}selected{% endif %}>No encontrado</option>
@@ -149,14 +149,14 @@
   <!-- Detalle -->
   <div class="col-md-6">
     <label for="detalle" class="form-label"><strong>Detalle</strong></label>
-    <textarea class="form-control" id="detalle" name="detalle" rows="3" placeholder="Describa el detalle">{{ gestion.detalle }}</textarea>
+    <textarea class="form-control" id="detalle" name="detalle" rows="3" placeholder="Describa el detalle" >{{ gestion.detalle }}</textarea>
     <div class="invalid-feedback">Por favor, ingrese el detalle.</div>
   </div>
 
   <!-- Causa -->
   <div class="col-md-6">
     <label for="causa" class="form-label"><strong>Causa</strong></label>
-    <textarea class="form-control" id="causa" name="causa" rows="3" placeholder="Describa la causa" required>{{ gestion.causa }}</textarea>
+    <textarea class="form-control" id="causa" name="causa" rows="3" placeholder="Describa la causa" >{{ gestion.causa }}</textarea>
     <div class="invalid-feedback">Por favor, describa la causa.</div>
   </div>
 </div>
@@ -166,7 +166,7 @@
 <!-- Validaciones -->
 <div class="mb-3">
   <label for="validaciones" class="form-label"><strong>Validaciones</strong></label>
-  <textarea class="form-control" id="validaciones" name="validaciones" rows="3" placeholder="Ingrese las validaciones" required>{{ gestion.validaciones }}</textarea>
+  <textarea class="form-control" id="validaciones" name="validaciones" rows="3" placeholder="Ingrese las validaciones" >{{ gestion.validaciones }}</textarea>
   <div class="invalid-feedback">Por favor, ingrese las validaciones.</div>
 </div>
 
@@ -190,7 +190,7 @@
   <label for="fecha_hora_inicial" class="form-label"><strong>Fecha y Hora Inicial</strong></label>
   <input type="datetime-local" class="form-control d-inline w-auto me-3" id="fecha_hora_inicial" name="fecha_hora_inicial" value="{{ gestion.fecha_hora_inicial|date:'Y-m-d\TH:i' }}" >
   <label for="fecha_hora_final" class="form-label"><strong>Fecha y Hora Final</strong></label>
-  <input type="datetime-local" class="form-control d-inline w-auto" id="fecha_hora_final" name="fecha_hora_final" value="{{ gestion.fecha_hora_final|date:'Y-m-d\TH:i' }}" >
+  <input type="datetime-local" class="form-control d-inline w-auto" id="fecha_hora_final" name="fecha_hora_final" value="{{ gestion.fecha_hora_final|date:'Y-m-d\TH:i' }}" {% if not gestion.fecha_hora_final %} placeholder="None" {% endif %}>
   <div class="invalid-feedback">Por favor, ingrese la fecha y hora inicial.</div>
 </div>
 
