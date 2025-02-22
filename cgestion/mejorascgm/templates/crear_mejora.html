@@ -171,15 +171,20 @@
     function toggleFechaHora() {
         var estado = document.getElementById("estado").value;
         var fechaHoraContainer = document.getElementById("fecha_hora_container");
+        var fechaHoraInput = document.getElementById("fecha_hora");
 
         if (estado === "cerrado") {
             fechaHoraContainer.style.display = "block"; // Muestra el campo
+            var now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset()); // Adjust for timezone offset
+            var formattedDateTime = now.toISOString().slice(0, 16);
+            fechaHoraInput.value = formattedDateTime; // Establece la hora actual
         } else {
             fechaHoraContainer.style.display = "none"; // Oculta el campo
+            fechaHoraInput.value = ""; // Limpia el valor del campo
         }
     }
 </script>
-
 
 
 
