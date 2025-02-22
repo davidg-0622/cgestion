@@ -151,22 +151,21 @@
                     <hr>
 <!-- Número de petición anterior y observaciones -->
 <div class="row mb-2">
-  <div class="col-md-4">
-      <label for="estado" class="form-label"><strong>Estado</strong></label>
-      <select name="estado" id="estado" class="form-select" required onchange="toggleFechaHora()">
-          <option value="abierto" {% if estado == 'abierto' %}selected{% endif %}>Abierto</option>
-          <option value="cerrado" {% if estado == 'cerrado' %}selected{% endif %}>Cerrado</option>
-      </select>
-  </div>
-</div>
-
-    
+    <div class="col-md-4">
+            <label for="estado" class="form-label"><strong>Estado</strong></label>
+            <select name="estado" id="estado" class="form-select" required onchange="toggleFechaHora()">
+                    <option value="abierto" {% if estado == 'abierto' %}selected{% endif %}>Abierto</option>
+                    <option value="cerrado" {% if estado == 'cerrado' %}selected{% endif %}>Cerrado</option>
+            </select>
+    </div>
     <div class="col" id="fecha_hora_container" style="display: none;">
-        <label for="fecha_hora" class="form-label"><strong>Fecha y Hora</strong></label>
-        <input type="datetime-local" class="form-control" id="fecha_hora" 
-               name="fecha_hora" value="{{ fecha_hora_actual }}" name="fecha_hora_mejora" readonly>
+            <label for="fecha_hora" class="form-label"><strong>Fecha y Hora</strong></label>
+            <input type="datetime-local" class="form-control" id="fecha_hora" name="fecha_hora" value="{{ fecha_hora_actual }}" name="fecha_hora_mejora" readonly>
     </div>
 </div>
+
+
+
 
 
 <div class="col-md-12">
@@ -179,18 +178,19 @@
     function toggleFechaHora() {
         var estado = document.getElementById("estado").value;
         var fechaHoraContainer = document.getElementById("fecha_hora_container");
+        var fechaHoraInput = document.getElementById("fecha_hora");
 
         if (estado === "cerrado") {
             fechaHoraContainer.style.display = "block"; // Muestra el campo
+            var now = new Date();
+            var formattedDateTime = now.toISOString().slice(0, 16);
+            fechaHoraInput.value = formattedDateTime; // Establece la hora actual
         } else {
             fechaHoraContainer.style.display = "none"; // Oculta el campo
+            fechaHoraInput.value = ""; // Limpia el valor del campo
         }
     }
 </script>
-
-
-
-
 
                     <hr>
 

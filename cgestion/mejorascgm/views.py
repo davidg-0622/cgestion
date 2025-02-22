@@ -160,8 +160,9 @@ def editar_mejora(request, id):
 
   
 
-    # Obtener la fecha y hora actuales en formato compatible con <input type="datetime-local">
-    fecha_hora_actual = datetime.now().strftime('%Y-%m-%dT%H:%M')
+    # Obtener la fecha y hora actuales en formato compatible con <input type="datetime-local>
+    fecha_hora_actual = timezone.localtime().strftime('%Y-%m-%dT%H:%M')
+    fecha_hora_actual_aware = timezone.localtime()
 
     if request.method == 'POST':
         # Actualizar los valores del objeto `Mejoracgm`
@@ -176,7 +177,7 @@ def editar_mejora(request, id):
         mejora.peticion_anterior = request.POST.get('peticion_anterior')
         mejora.observaciones = request.POST.get('observaciones')
 
-        # Si el campo de fecha está vacío, usa la fecha actual
+        mejora.fecha_hora_mejora = request.POST.get('fecha_hora_mejora') or fecha_hora_actual_aware
         mejora.fecha_hora_mejora = request.POST.get('fecha_hora_mejora') or fecha_hora_actual
 
         mejora.area_responsable = request.POST.get('area_responsable')

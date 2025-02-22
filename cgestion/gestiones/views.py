@@ -267,7 +267,7 @@ def enviar_gestion_email(request, gestion_id):
     contenido_html = render_to_string('email_template.html', {'gestiones': [gestion]})
 
     # Configurar el correo
-    subject = "Reporte de Gestión Editada"
+    subject = "Reporte de Gestion"
     from_email = "davidg06.buitrago@gmail.com"
     recipient_list = ["davidg06.buitrago@gmail.com"]  
 
