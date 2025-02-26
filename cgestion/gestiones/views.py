@@ -22,6 +22,9 @@ from django.http import HttpResponse
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
+from django.utils.timezone import now, localtime
+from django.contrib.auth.models import User
+
 
 ############################## Crear gestion #######################################
 
@@ -220,27 +223,39 @@ def editar_gestion(request, id):
 #################
 
 def register_page(request):
-    # Crea el formulario de registro
     register_form = RegisterForm()
 
     if request.method == "POST":
         register_form = RegisterForm(request.POST)
 
         if register_form.is_valid():
-            email = register_form.cleaned_data.get('email')
-            if email and email.endswith('@bancolombia.com.co'):
-                register_form.save()
-                # Redirigir a la página de gestión o la URL correcta
-                # Asegúrate de que 'listar_gestiones' sea el nombre de la URL definida en tus urls.py
-                messages.success(request, 'Registro exitoso. Por favor, inicie sesión.')
-                return redirect('login')
-            else:
-                messages.error(
-                    request, 'El registro solo está permitido con correos @bancolombia.com.co')
+            email = register_form.cleaned_data.get('email').strip().lower()
+            username = register_form.cleaned_data.get('username').strip().lower()
+
+            if not email.endswith('@bancolombia.com.co'):
+                messages.error(request, 'El correo solo está permitido con dominio Bancolombia (@bancolombia.com.co)')
+                return render(request, 'users/register.html', {'register_form': register_form})
+
+            if User.objects.filter(username=username).exists():
+                messages.error(request, 'Este nombre de usuario ya está registrado.')
+                return render(request, 'users/register.html', {'register_form': register_form})
+
+            user = register_form.save(commit=False)  # No guarda aún
+            user.username = username  # Forzar minúsculas
+            user.date_joined = now()  # Guarda la fecha con la zona horaria correcta
+            user.save()  # Guardar usuario
+
+            messages.success(request, 'Registro exitoso. Por favor, inicie sesión.')
+            return redirect('login')
+
         else:
             messages.error(request, 'Por favor, corrija los errores en el formulario.')
 
     return render(request, 'users/register.html', {'register_form': register_form})
+
+
+
+
 
 
 ############################## funcion de login ####################################
