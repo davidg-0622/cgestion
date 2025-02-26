@@ -5,13 +5,11 @@
 }
 
 body {
+    background-color: #f2f2f2;
     background: url("/static/images/logofondo.png") no-repeat center center fixed !important;
     background-size: cover !important;
+    
 
-}
-html {
-    height: -webkit-fill-available;
-    background: url("{% static 'images/logofondo.png' %}") no-repeat center;
 }
 
 

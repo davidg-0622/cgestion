@@ -24,6 +24,8 @@ from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now, localtime
 from django.contrib.auth.models import User
+from django.contrib.auth import update_session_auth_hash
+from .forms import ChangePasswordForm
 
 
 ############################## Crear gestion #######################################
@@ -472,8 +474,52 @@ def listar_gestiones_en_investigacion(request):
     })
 
 
-####################### crear grafico con la data gestion ##########################
 
+################################Cambiar contraseña ##################################
+
+
+@login_required
+def change_password(request):
+    if request.method == "POST":
+        form = ChangePasswordForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Mantiene la sesión activa
+            messages.success(request, "Tu contraseña ha sido cambiada exitosamente.")
+            return redirect("login")  # Redirige a la vista del perfil o donde prefieras
+    else:
+        form = ChangePasswordForm(user=request.user)
+    
+    return render(request, "users/change_password.html", {"form": form})
+
+
+
+
+
+def perfil(request):
+    return render(request, "users/login.html")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###########################################################################
+####################### crear grafico con la data gestion ##########################
 
 def grafico_gestiones(request):
     # Obtener los datos agrupados por responsable_gioti

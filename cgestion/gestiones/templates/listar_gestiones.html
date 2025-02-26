@@ -3,7 +3,8 @@
 {% block content %}
 
 <!-- Barra superior -->
-<nav class="navbar navbar-expand-lg px-3" style="background-color:  rgb(245, 244, 244);">
+<nav class="navbar navbar-expand-lg px-3" style="background-color: white">
+  
   <div class="container-fluid">
       <span class="navbar-text text-dark ms-auto">
           {% if first_name %}
@@ -14,6 +15,10 @@
       </span>
   </div>
 </nav>
+
+<br>
+
+
 
 {% if messages %}
     {% for message in messages %}
@@ -28,16 +33,15 @@
     <span class="fw-bold fs-5">+</span> Crear Gestión
   </a>
 </div>
+<br>
 
 
 <!-- Formulario de búsqueda con filtro de fechas -->
 <form method="GET" action="{% url 'listar_gestiones' %}">
-  <div class="row g-2 align-items-center">
+  <div class="row g-2 align-items-center ms-3">
     <!-- Campo de búsqueda (Más grande) -->
     <div class="col-md-4">
-      <input type="text" name="q" class="form-control form-control" 
-             style="width: 100%;" placeholder="Buscar..." 
-             value="{{ query|default:'' }}">
+      <input type="text" name="q" class="form-control form-control" style="width: 100%;" placeholder="Buscar..." value="{{ query|default:'' }}">
     </div>
 
     <!-- Fecha de inicio -->
@@ -52,12 +56,11 @@
 
     <!-- Botón de búsqueda (Más grande) -->
     <div class="col-auto">
-      <button type="submit" class="btn btn-primary ">🔍 Buscar</button>
+      <button type="submit" class="btn btn-primary ">🔍 Buscar</button>  <a href="{% url 'listar_gestiones_en_investigacion' %}" class="btn btn-danger px-2 py-2">Casos en investigación </a>
     </div>
   </div>
 </form>
 <br>
-<a href="{% url 'listar_gestiones_en_investigacion' %}" class="btn btn-danger">Casos en investigación</a>
 
 
 
