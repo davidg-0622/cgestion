@@ -56,7 +56,6 @@
   <div class="col">
       <label class="form-label"><strong>Tipo de Mejora</strong></label>
       <select name="tipo_de_mejora" id="tipo_de_mejora" class="form-select" required>
-          <option value="---" {% if mejora.tipo_de_mejora == "---" %}selected{% endif %}>---</option>
           <option value="Alerta_falla_masiva" {% if mejora.tipo_de_mejora == "Alerta_falla_masiva" %}selected{% endif %}>Alerta falla masiva</option>
           <option value="Correccion_variable" {% if mejora.tipo_de_mejora == "Correccion_variable" %}selected{% endif %}>Corrección variable</option>
           <option value="Corregir_umbrales_de_monitoreo" {% if mejora.tipo_de_mejora == "Corregir_umbrales_de_monitoreo" %}selected{% endif %}>Corregir umbrales de monitoreo</option>

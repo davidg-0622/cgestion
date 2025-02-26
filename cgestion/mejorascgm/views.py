@@ -6,12 +6,13 @@ from django.shortcuts import redirect
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 
 
 
 
-
+@login_required(login_url='/login/')
 def crear_mejora(request):
     first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
     fecha_hora_mejora = timezone.now()
@@ -74,7 +75,7 @@ def crear_mejora(request):
 
 
 
-
+@login_required(login_url='/login/')
 def listar_mejora(request):
     first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
     query = request.GET.get('q', '')
@@ -114,7 +115,7 @@ def listar_mejora(request):
 
 
 
-
+@login_required(login_url='/login/')
 def listar_mejoras_cerradas(request):
     first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
     query = request.GET.get('q', '')
@@ -153,7 +154,7 @@ def listar_mejoras_cerradas(request):
 
 
 
-
+@login_required(login_url='/login/')
 def editar_mejora(request, id):
     first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
     mejora = get_object_or_404(Mejoracgm, id=id)

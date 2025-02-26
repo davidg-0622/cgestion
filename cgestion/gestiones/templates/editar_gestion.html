@@ -21,7 +21,10 @@
   {{ form.as_p }}
 
 
-  <a href="{% url 'enviar_email' gestion.id %}" class="btn btn-primary">Enviar por Email</a>
+  <div class="d-flex justify-content-center my-3">
+    <a href="{% url 'enviar_email' gestion.id %}" class="btn btn-primary">Enviar por Email</a>
+  
+  </div>
 
 
 

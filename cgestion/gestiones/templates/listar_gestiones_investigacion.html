@@ -31,28 +31,18 @@
 
 
 <!-- Formulario de búsqueda con filtro de fechas -->
-<form method="GET" action="{% url 'listar_gestiones_en_investigacion' %}">
+<form class="ms-3 mb-2"></form>
   <div class="row g-2 align-items-center">
     <!-- Campo de búsqueda (Más grande) -->
     <div class="col-md-4">
       <input type="text" name="q" class="form-control form-control" 
-             style="width: 90%;" placeholder="Buscar..." 
+             style="width: 100%;" placeholder="Buscar..." 
              value="{{ query|default:'' }}">
-    </div>
-
-    <!-- Fecha de inicio -->
-    <div class="col-md-2">
-      <input type="date" name="fecha_inicio" class="form-control form-control" value="{{ fecha_hora_inicial }}">
-    </div>
-
-    <!-- Fecha de fin -->
-    <div class="col-md-2">
-      <input type="date" name="fecha_fin" class="form-control form-control" value="{{ fecha_hora_final }}">
     </div>
 
     <!-- Botón de búsqueda (Más grande) -->
     <div class="col-auto">
-      <button type="submit" class="btn btn-primary ">🔍 Buscar</button>
+      <button type="submit" class="btn btn-primary">🔍 Buscar</button>
     </div>
   </div>
 </form>
@@ -70,23 +60,19 @@
       <thead class="table-dark">
         <tr>
           <th class="text-center">-</th>
-          <th class="text-center">numero_caso</th>
-          <th class="text-center">tipo_causa</th>
-          <th class="text-center">responsable_gioti</th>
+          <th class="text-center">Numero caso</th>
+          <th class="text-center">Tipo causa</th>
+          <th class="text-center">Responsable COES</th>
           <th class="text-center">Servicio</th>
-          <th class="text-center">tipo_de_gestion</th>
-          <th class="text-center">detectada_por</th>
-          <th class="text-center">causado_por_certificado_digital</th>
-          <th class="text-center">incidente_generado_por_OC</th>
-          <th class="text-center">atribuible_a</th>
-          <th class="text-center">tipo_de_falla</th>
-          <th class="text-center">detalle</th>
-          <th class="text-center">causa</th>
-          <th class="text-center">validaciones</th>
-          <th class="text-center">solucion</th>
-          <th class="text-center">fecha_hora_inicial</th>
-          <th class="text-center">fecha_hora_final</th>
-          <th class="text-center">gioti</th>
+          <th class="text-center">Tipo de gestion</th>
+          <th class="text-center">Atribuible a</th>
+          <th class="text-center">Detalle</th>
+          <th class="text-center">Causa</th>
+          <th class="text-center">Validaciones</th>
+          <th class="text-center">Solucion</th>
+          <th class="text-center">Fecha hora inicial</th>
+          <th class="text-center">Fecha hora final</th>
+          <th class="text-center">COES</th>
         </tr>
       </thead>
       <tbody>
@@ -105,23 +91,7 @@
           <td>{{ gestion.responsable_gioti }}</td>
           <td>{{ gestion.servicio }}</td>
           <td>{{ gestion.tipo_de_gestion }}</td>
-          <td>{{ gestion.detectada_por }}</td>
-          <td>
-            {% if gestion.causado_por_certificado_digital %}
-              <span class="badge bg-success">Sí</span>
-            {% else %}
-              <span class="badge bg-danger">No</span>
-            {% endif %}
-          </td>
-          <td>
-            {% if gestion.incidente_generado_por_OC %}
-              <span class="badge bg-success">Sí</span>
-            {% else %}
-              <span class="badge bg-danger">No</span>
-            {% endif %}
-          </td>
           <td>{{ gestion.atribuible_a }}</td>
-          <td>{{ gestion.tipo_de_falla }}</td>
           <td>{{ gestion.detalle }}</td>
           <td>{{ gestion.causa }}</td>
           <td>{{ gestion.validaciones }}</td>
