@@ -298,8 +298,7 @@ def enviar_gestion_email(request, gestion_id):
     gestion = get_object_or_404(Gestion, id=gestion_id)
 
     # Renderizar la tabla como HTML solo con esta gestión
-    contenido_html = render_to_string(
-        'email_template.html', {'gestiones': [gestion]})
+    contenido_html = render_to_string('email_template.html', {'gestiones': [gestion]})
 
     # Configurar el correo
     subject = "Reporte de Gestion"

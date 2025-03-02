@@ -7,7 +7,8 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 
 
 
@@ -38,7 +39,7 @@ def crear_mejora(request):
         if fecha_hora_mejora_str:
             try:
                 fecha_hora_mejora = datetime.strptime(fecha_hora_mejora_str, "%Y-%m-%dT%H:%M")
-                fecha_hora_mejora = timezone.make_aware(fecha_hora_mejora)
+                fecha_hora_mejora = datetime.strptime(fecha_hora_mejora_str, "%Y-%m-%dT%H:%M")
             except ValueError:
                 messages.error(request, "Formato de fecha/hora inválido")
                 return render(request, "crear_mejora.html", {"first_name": first_name, "fecha_hora_mejora": fecha_hora_mejora})
@@ -159,11 +160,9 @@ def editar_mejora(request, id):
     first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
     mejora = get_object_or_404(Mejoracgm, id=id)
 
-  
-
-    # Obtener la fecha y hora actuales en formato compatible con <input type="datetime-local>
-    fecha_hora_actual = timezone.localtime().strftime('%Y-%m-%dT%H:%M')
-    fecha_hora_actual_aware = timezone.localtime()
+  # Obtener la fecha y hora actuales en formato compatible con <input type="datetime-local">
+    fecha_hora_actual = datetime.now().strftime('%Y-%m-%dT%H:%M')
+    fecha_hora_actual_aware = datetime.now()  # No es necesario usar timezone.localtime()
 
     if request.method == 'POST':
         # Actualizar los valores del objeto `Mejoracgm`
@@ -206,3 +205,28 @@ def editar_mejora(request, id):
         'fecha_hora_actual': fecha_hora_actual
     })
 
+###################################enviar email ########################################
+
+
+@login_required(login_url='/login/')
+def enviar_mejora_email(request, mejora_id):
+    # Obtener la gestión editada
+    mejora = get_object_or_404(Mejoracgm, id=mejora_id)
+
+    # Renderizar la tabla como HTML solo con esta gestión
+    contenido_html = render_to_string('email_template_mejora.html', {'mejoras': [mejora]})
+
+    # Configurar el correo
+    subject = "Solicitud de mejora"
+    from_email = "davidg06.buitrago@gmail.com"
+    recipient_list = ["davidg06.buitrago@gmail.com"]
+
+    # Crear el correo con contenido HTML
+    email = EmailMessage(subject, contenido_html, from_email, recipient_list)
+    email.content_subtype = "html"
+
+    try:
+        email.send()
+        return render(request, 'success.html', {'mensaje': 'Correo enviado correctamente'})
+    except Exception as e:
+        return render(request, 'error.html', {'mensaje': f'Error al enviar correo: {str(e)}'})

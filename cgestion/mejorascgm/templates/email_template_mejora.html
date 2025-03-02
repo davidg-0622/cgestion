@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reporte CGM</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid black; padding: 8px; text-align: center; }
+        th { background-color: #343a40; color: white; }
+        td { white-space: pre-wrap; } /* This will preserve whitespace and line breaks */
+    </style>
+</head>
+<body>
+    {% for mejora in mejoras %}
+    <p>Se creao la mejora con el servicio <strong>{{ mejora.servicio }}</strong>, numero de <strong>{{ mejora.numero_peticion }}</strong> 
+        y la variable <strong>{{ mejora.variable }}</strong></p>
+    {% endfor %}
+    <table>
+        <thead>
+            <tr>
+                <th>Servicio</th>
+                <th>Herramienta de monitoreo</th>
+                <th>Tipo de mejora</th>
+                <th>Numero de peticion</th>
+                <th>Numero WO</th>
+                <th>Servidor</th>
+                <th>Variable</th>
+                <th>Observaciones</th>
+                <th>Fecha y Hora mejora</th>
+                <th>Mejora creada por</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for mejora in mejoras %}
+            <tr>
+                <td>{{ mejora.servicio }}</td>
+                <td>{{ mejora.herramienta_de_monitoreo }}</td>
+                <td>{{ mejora.tipo_de_mejora }}</td>
+                <td>{{ mejora.numero_peticion }}</td>
+                <td>{{ mejora.numero_wo }}</td>
+                <td>{{ mejora.servidor }}</td>
+                <td>{{ mejora.variable }}</td>
+                <td>{{ mejora.observaciones }}</td>
+                <td>{{ mejora.fecha_hora_mejora }}</td>
+                <td>{{ mejora.mejora_creada_por}}</td>
+           
+                <!-- <td>{% if gestion.gioti %}✔{% else %}✘{% endif %}</td> -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
