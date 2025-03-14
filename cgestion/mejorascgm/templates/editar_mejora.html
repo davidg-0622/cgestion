@@ -1,0 +1,220 @@
+{% extends "layout.html" %}
+
+{% block title %}Crear nueva gestión{% endblock %}
+
+{% load static %}
+
+<main>
+    {% block content %}
+
+    <!-- Barra superior -->
+<nav class="navbar navbar-expand-lg px-3" style="background-color: white">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'listar_mejora' %}">
+            <img src="{% static 'images/logo.JPG' %}" alt="Logo" width="50" height="40">
+          </a>
+        <span class="navbar-text text-dark ms-auto">
+            Bienvenido/a, <strong>{{ first_name }}</strong>
+        </span>
+    </div>
+  </nav>
+
+
+  <div class="d-flex justify-content-center my-3">
+    <a href="{% url 'enviar_mejora_email' mejora.id %}" class="btn btn-primary">Enviar por Email</a>
+
+  
+  </div>
+
+
+    <div class="container contact-form">
+        <div class="contact-image">
+            <img src="{% static 'images/logofondo.png' %}" class="img_formulariomejora" alt="rocket_contact" />
+        </div>
+        <div class="container contact-form">
+            <h3><strong>Editar Mejora</strong></h3>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="container">
+
+                    <!-- Información general -->
+<div class="row mb-3">
+    <div class="col">
+        <label class="form-label"><strong>Servicio</strong></label>
+        <input type="text" class="form-control" id="servicio" name="servicio" value="{{ mejora.servicio }}" required>
+    </div>
+    <div class="col">
+        <label class="form-label"><strong>Herramienta de Monitoreo</strong></label>
+        <select name="herramienta_de_monitoreo" id="herramienta_de_monitoreo" class="form-select" required>
+            <option value="---" {% if mejora.herramienta_de_monitoreo == "---" %}selected{% endif %}>---</option>
+            <option value="Dynatrace" {% if mejora.herramienta_de_monitoreo == "Dynatrace" %}selected{% endif %}>Dynatrace</option>
+            <option value="Wily" {% if mejora.herramienta_de_monitoreo == "Wily" %}selected{% endif %}>Wily</option>
+            <option value="Kyndryl" {% if mejora.herramienta_de_monitoreo == "Kyndryl" %}selected{% endif %}>Kyndryl</option>
+            <option value="Grafana" {% if mejora.herramienta_de_monitoreo == "Grafana" %}selected{% endif %}>Grafana</option>
+            <option value="ELK" {% if mejora.herramienta_de_monitoreo == "ELK" %}selected{% endif %}>ELK</option>
+            <option value="NOI" {% if mejora.herramienta_de_monitoreo == "NOI" %}selected{% endif %}>NOI</option>
+            <option value="SAMI" {% if mejora.herramienta_de_monitoreo == "SAMI" %}selected{% endif %}>SAMI</option>
+            <option value="NIX" {% if mejora.herramienta_de_monitoreo == "NIX" %}selected{% endif %}>NIX</option>
+            <option value="CloudWatch" {% if mejora.herramienta_de_monitoreo == "CloudWatch" %}selected{% endif %}>CloudWatch</option>
+        </select>
+    </div>
+</div>
+
+
+                   <!-- Tipo de mejora y número de petición -->
+<div class="row mb-3">
+  <div class="col">
+      <label class="form-label"><strong>Tipo de Mejora</strong></label>
+      <select name="tipo_de_mejora" id="tipo_de_mejora" class="form-select" required>
+          <option value="Alerta_falla_masiva" {% if mejora.tipo_de_mejora == "Alerta_falla_masiva" %}selected{% endif %}>Alerta falla masiva</option>
+          <option value="Correccion_variable" {% if mejora.tipo_de_mejora == "Correccion_variable" %}selected{% endif %}>Corrección variable</option>
+          <option value="Corregir_umbrales_de_monitoreo" {% if mejora.tipo_de_mejora == "Corregir_umbrales_de_monitoreo" %}selected{% endif %}>Corregir umbrales de monitoreo</option>
+          <option value="mejoras_al_monitoreo_de_un_servicio" {% if mejora.tipo_de_mejora == "mejoras_al_monitoreo_de_un_servicio" %}selected{% endif %}>Mejoras al monitoreo de un servicio</option>
+          <option value="variable_o_servicio_eliminado" {% if mejora.tipo_de_mejora == "variable_o_servicio_eliminado" %}selected{% endif %}>Variable o servicio eliminado</option>
+      </select>
+  </div>
+  <div class="col">
+      <label for="numero_peticion" class="form-label"><strong>Número de Petición</strong></label>
+      <input type="text" class="form-control" id="numero_peticion" name="numero_peticion" value="{{ mejora.numero_peticion }}" required>
+  </div>
+</div>
+
+
+                   <!-- Número WO y servidor -->
+<div class="row mb-3">
+  <div class="col">
+      <label for="numero_wo" class="form-label"><strong>Número WO</strong></label>
+      <input type="text" class="form-control" id="numero_wo" name="numero_wo" value="{{ mejora.numero_wo }}">
+  </div>
+  <div class="col">
+      <label for="servidor" class="form-label"><strong>Servidor</strong></label>
+      <input type="text" class="form-control" id="servidor" name="servidor" value="{{ mejora.servidor }}">
+  </div>
+</div>
+
+
+<!-- Variable y petición reincidente -->
+<div class="row mb-3">
+    <div class="col">
+        <label for="variable" class="form-label"><strong>Variable</strong></label>
+        <textarea class="form-control" id="variable" name="variable" rows="3" required>{{ mejora.variable }}</textarea>
+    </div>
+    <div class="col">
+        <label for="peticion_reincidente" class="form-label"><strong>Petición Reincidente</strong></label>
+        <select name="peticion_reincidente" id="peticion_reincidente" class="form-select" required>
+            <option value="---" {% if mejora.peticion_reincidente == '---' %}selected{% endif %}>---</option>
+            <option value="si" {% if mejora.peticion_reincidente == 'si' %}selected{% endif %}>SI</option>
+            <option value="no" {% if mejora.peticion_reincidente == 'no' %}selected{% endif %}>NO</option>
+        </select>
+    </div>
+</div>
+
+
+
+
+<!-- Número de petición anterior y observaciones -->
+<div class="row mb-3">
+    <div class="col">
+        <label for="peticion_anterior" class="form-label"><strong>Nº Petición Anterior</strong></label>
+        <input type="text" class="form-control" id="peticion_anterior" name="peticion_anterior" value="{{ mejora.peticion_anterior }}" required>
+    </div>
+    <div class="col">
+        <label for="observaciones" class="form-label"><strong>Observaciones</strong></label>
+        <textarea class="form-control" id="observaciones" name="observaciones" rows="3" required>{{ mejora.observaciones }}</textarea>
+    </div>
+</div>
+
+<!-- Fecha y hora mejora, área responsable -->
+<div class="row mb-3">
+    <div class="col-md-6">
+        <label for="fecha_hora_mejora" class="form-label"><strong>Fecha y Hora Mejora</strong></label>
+        <input type="datetime-local" class="form-control" id="fecha_hora_mejora" value="{{ mejora.fecha_hora_mejora|date:'Y-m-d\TH:i' }}" name="fecha_hora_mejora" readonly>
+    </div>
+    <div class="col-md-6">
+        <label for="area_responsable" class="form-label"><strong>Área Responsable</strong></label>
+        <select name="area_responsable" id="area_responsable" class="form-select" required>
+            <option value="---" {% if mejora.area_responsable == '---' %}selected{% endif %}>---</option>
+            <option value="CGM" {% if mejora.area_responsable == 'CGM' %}selected{% endif %}>CGM</option>
+            <option value="IM" {% if mejora.area_responsable == 'IM' %}selected{% endif %}>IM</option>
+            <option value="PM" {% if mejora.area_responsable == 'PM' %}selected{% endif %}>PM</option>
+        </select>
+    </div>
+</div>
+
+
+  
+
+
+               <!-- Mejora creada por -->
+<div class="row mb-3">
+  <div class="col-md-6">
+      <label for="mejora_creada_por" class="form-label"><strong>Mejora creada por</strong></label>
+      <input type="text" class="form-control" id="mejora_creada_por" name="mejora_creada_por" 
+          value="{{ user }}" readonly>
+  </div>
+</div>
+
+
+
+                    <hr>
+<!-- Número de petición anterior y observaciones -->
+<div class="row mb-2">
+    <div class="col-md-4">
+            <label for="estado" class="form-label"><strong>Estado</strong></label>
+            <select name="estado" id="estado" class="form-select" required onchange="toggleFechaHora()">
+                    <option value="abierto" {% if estado == 'abierto' %}selected{% endif %}>Abierto</option>
+                    <option value="cerrado" {% if estado == 'cerrado' %}selected{% endif %}>Cerrado</option>
+            </select>
+    </div>
+    <div class="col" id="fecha_hora_container" style="display: none;">
+            <label for="fecha_hora" class="form-label"><strong>Fecha y Hora</strong></label>
+            <input type="datetime-local" class="form-control" id="fecha_hora" name="fecha_hora" value="{{ fecha_hora_actual }}" name="fecha_hora_mejora" readonly>
+    </div>
+</div>
+
+
+
+
+
+<div class="col-md-12">
+  <label for="solucion" class="form-label"><strong>Solución</strong></label>
+  <textarea class="form-control" id="solucion" name="solucion" rows="3">{{ solucion }}</textarea>
+</div>
+
+
+<script>
+    function toggleFechaHora() {
+        var estado = document.getElementById("estado").value;
+        var fechaHoraContainer = document.getElementById("fecha_hora_container");
+        var fechaHoraInput = document.getElementById("fecha_hora");
+
+        if (estado === "cerrado") {
+            fechaHoraContainer.style.display = "block"; // Muestra el campo
+            var now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset()); // Adjust for timezone offset
+            var formattedDateTime = now.toISOString().slice(0, 16);
+            fechaHoraInput.value = formattedDateTime; // Establece la hora actual
+        } else {
+            fechaHoraContainer.style.display = "none"; // Oculta el campo
+            fechaHoraInput.value = ""; // Limpia el valor del campo
+        }
+    }
+</script>
+
+                    <hr>
+
+                    <!-- Botón para enviar el formulario -->
+                    <div class="row mb-3   ">
+                        <div class="col text-center">
+                            <button type="submit" class="btn btn-primary btnContact">Guardar Cambios</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+
+        </div>
+
+     
+        {% endblock %}

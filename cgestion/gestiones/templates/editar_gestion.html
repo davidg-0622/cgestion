@@ -1,0 +1,226 @@
+{% extends "layout.html" %}
+
+{% block title %}Crear nueva gestión{% endblock %}
+
+{% load static %}
+
+
+
+{% block content %}
+
+<!-- Barra superior -->
+<nav class="navbar navbar-expand-lg px-3" style="background-color: white">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'listar_gestiones' %}">
+      <img src="{% static 'images/logo.JPG' %}" alt="Logo" width="50" height="40">
+  </a>
+      <span class="navbar-text text-dark ms-auto">
+          Bienvenido/a, <strong>{{ first_name }}</strong>
+      </span>
+  </div>
+</nav>
+
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+
+  <div class="d-flex justify-content-center my-3">
+    <a href="{% url 'enviar_email' gestion.id %}" class="btn btn-primary">Enviar por Email</a>
+  
+  </div>
+
+
+
+
+<div class="container-fluid d-flex flex-column align-items-center" style="min-height: 100vh; padding: 50px 15px; overflow-y: auto;">
+  <div class="card shadow p-4" style="max-width: 1500px; width: 100%;">
+    <h1 class="mb-4 text-center text-danger"><strong>Editar gestión</strong></h1>
+
+    <form method="POST" novalidate>
+      {% csrf_token %}
+      <div class="mb-3">
+        <div class="row g-3 align-items-end">
+         
+            <!-- Servicio -->
+            <div class="col-md-3">
+              <label for="servicio" class="form-label"><strong>Servicio</strong></label>
+              <input type="text" class="form-control" id="servicio" name="servicio" value="{{ gestion.servicio }}" placeholder="Ingrese el servicio">
+              <div class="invalid-feedback">Por favor, ingrese el servicio.</div>
+            </div>
+          
+            <!-- Tipo de Gestión -->
+            <div class="col-md-3">
+              <label for="tipo_de_gestion" class="form-label"><strong>Tipo de Gestión</strong></label>
+              <select class="form-select" id="tipo_de_gestion" name="tipo_de_gestion" >
+                <option value="" disabled selected>Seleccione el tipo de gestión</option>
+                <option value="Evento" {% if gestion.tipo_de_gestion == 'Evento' %}selected{% endif %}>Evento</option>
+                <option value="Incidente" {% if gestion.tipo_de_gestion == 'Incidente' %}selected{% endif %}>Incidente</option>
+                <option value="Orden de cambio" {% if gestion.tipo_de_gestion == 'Orden de cambio' %}selected{% endif %}>Orden de cambio</option>
+              </select>
+              <div class="invalid-feedback">Por favor, seleccione un tipo de gestión.</div>
+            </div>
+          
+            <!-- Número de Caso -->
+            <div class="col-md-3">
+              <label for="numero_caso" class="form-label"><strong>Número de Caso</strong></label>
+              <input type="text" class="form-control" id="numero_caso" name="numero_caso" placeholder="Ingrese el número de caso" value="{{ gestion.numero_caso }}">
+              <div class="invalid-feedback">Por favor, ingrese el número de caso.</div>
+            </div>
+          
+            <!-- Detectada Por -->
+            <div class="col-md-3">
+              <label for="detectada_por" class="form-label"><strong>Detectada Por</strong></label>
+              <select class="form-select" id="detectada_por" name="detectada_por" >
+                <option value="">Seleccione quién detectó el problema</option>
+                <option value="Herramientas de monitoreo" {% if gestion.detectada_por == 'Herramientas de monitoreo' %}selected{% endif %}>Herramientas de monitoreo</option>
+                <option value="Analista de confiabilidad" {% if gestion.detectada_por == 'Analista de confiabilidad' %}selected{% endif %}>Analista de confiabilidad</option>
+                <option value="Analista de soporte/Stand by" {% if gestion.detectada_por == 'Analista de soporte/Stand by' %}selected{% endif %}>Analista de soporte/Stand by</option>
+                <option value="Torre de control" {% if gestion.detectada_por == 'Torre de control' %}selected{% endif %}>Torre de control</option>
+                <option value="Pruebas manuales CGM" {% if gestion.detectada_por == 'Pruebas manuales CGM' %}selected{% endif %}>Pruebas manuales CGM</option>
+                <option value="Proveedor/aliado" {% if gestion.detectada_por == 'Proveedor/aliado' %}selected{% endif %}>Proveedor/aliado</option>
+                <option value="Otros" {% if gestion.detectada_por == 'Otros' %}selected{% endif %}>Otros</option>
+              </select>
+              <div class="invalid-feedback">Por favor, seleccione quién detectó el problema.</div>
+            </div>
+          </div>
+          
+
+
+     <!-- Causado por certificado digital -->
+<div class="mb-3">
+  <label class="form-label"><strong>Causado por certificado digital</strong></label>
+  <input type="checkbox" id="causado_por_certificado_digital" class="checkbox-grande" name="causado_por_certificado_digital" {% if gestion.causado_por_certificado_digital %} checked {% endif %} {% if causadoporc == "on" %} checked {% endif %}>
+    <label for="causado_por_certificado_digital" class="badge bg-success"> Sí </label>
+  <label class="form-label"><strong>Incidente Generado por OC</strong></label>
+  <input type="checkbox" id="incidente_generado_por_OC" class="checkbox-grande" name="incidente_generado_por_OC" {% if gestion.incidente_generado_por_OC %} checked {% endif %} {% if generadoporc == "on" %} checked {% endif %}>
+  <div class="invalid-feedback">Por favor, indique si fue causado por certificado digital.</div>
+  <label for="incidente_generado_por_OC" class="badge bg-success"> Sí </label>
+  <div class="invalid-feedback">Por favor, indique si el incidente fue generado por OC.</div>
+</div>
+
+
+<div class="row g-3 align-items-end">
+  <!-- Atribuible a -->
+  <div class="col-md-4">
+    <label for="atribuible_a" class="form-label"><strong>Atribuible a</strong></label>
+    <select class="form-select" id="atribuible_a" name="atribuible_a" >
+      <option value="" disabled selected>Seleccione a quién es atribuible</option>
+      <option value="EVC" {% if gestion.atribuible_a == 'EVC' %}selected{% endif %}>EVC</option>
+      <option value="Cloud" {% if gestion.atribuible_a == 'Cloud' %}selected{% endif %}>Cloud</option>
+      <option value="Base de datos" {% if gestion.atribuible_a == 'Base de datos' %}selected{% endif %}>Base de datos</option>
+      <option value="ISERIES" {% if gestion.atribuible_a == 'ISERIES' %}selected{% endif %}>ISERIES</option>
+      <option value="Ciberseguridad" {% if gestion.atribuible_a == 'Ciberseguridad' %}selected{% endif %}>Ciberseguridad</option>
+      <option value="Plataformas distribuidas" {% if gestion.atribuible_a == 'Plataformas distribuidas' %}selected{% endif %}>Plataformas distribuidas</option>
+      <option value="Telecomunicaciones" {% if gestion.atribuible_a == 'Telecomunicaciones' %}selected{% endif %}>Telecomunicaciones</option>
+      <option value="Integracion" {% if gestion.atribuible_a == 'Integracion' %}selected{% endif %}>Integración</option>
+      <option value="SOA" {% if gestion.atribuible_a == 'SOA' %}selected{% endif %}>SOA</option>
+      <option value="Pseries" {% if gestion.atribuible_a == 'Pseries' %}selected{% endif %}>Pseries</option>
+      <option value="Usuarios" {% if gestion.atribuible_a == 'Usuarios' %}selected{% endif %}>Usuarios</option>
+      <option value="Aliados" {% if gestion.atribuible_a == 'Aliados' %}selected{% endif %}>Aliados</option>
+      <option value="Sin definir" {% if gestion.atribuible_a == 'Sin definir' %}selected{% endif %}>Sin definir</option>
+    </select>
+    <div class="invalid-feedback">Por favor, seleccione a quién es atribuible.</div>
+  </div>
+
+
+  <!-- Tipo de Falla -->
+  <div class="col-md-4">
+    <label for="tipo_de_falla" class="form-label"><strong>Tipo de Falla</strong></label>
+    <select class="form-select" id="tipo_de_falla" name="tipo_de_falla" >
+      <option value="" disabled selected>----</option>
+      <option value="Parcial" {% if gestion.tipo_de_falla == 'Parcial' %}selected{% endif %}>Parcial</option>
+      <option value="Total" {% if gestion.tipo_de_falla == 'Total' %}selected{% endif %}>Total</option>
+    </select>
+    <div class="invalid-feedback">Por favor, seleccione el tipo de falla.</div>
+  </div>
+
+  <!-- Tipo Causa -->
+  <div class="col-md-4">
+    <label for="tipo_causa" class="form-label"><strong>Tipo Causa</strong></label>
+    <select class="form-select" id="tipo_causa" name="tipo_causa" >
+      <option value="" disabled selected>----</option>
+      <option value="En investigacion" {% if gestion.tipo_causa == 'En investigacion' %}selected{% endif %}>En investigación</option>
+      <option value="Encontrado" {% if gestion.tipo_causa == 'Encontrado' %}selected{% endif %}>Encontrado</option>
+      <option value="No encontrado" {% if gestion.tipo_causa == 'No encontrado' %}selected{% endif %}>No encontrado</option>
+    </select>
+    <div class="invalid-feedback">Por favor, seleccione el tipo de causa.</div>
+  </div>
+
+  
+</div>
+
+
+
+<div class="row g-3">
+  <!-- Detalle -->
+  <div class="col-md-6">
+    <label for="detalle" class="form-label"><strong>Detalle</strong></label>
+    <textarea class="form-control" id="detalle" name="detalle" rows="3" placeholder="Describa el detalle" >{{ gestion.detalle }}</textarea>
+    <div class="invalid-feedback">Por favor, ingrese el detalle.</div>
+  </div>
+
+  <!-- Causa -->
+  <div class="col-md-6">
+    <label for="causa" class="form-label"><strong>Causa</strong></label>
+    <textarea class="form-control" id="causa" name="causa" rows="3" placeholder="Describa la causa" >{{ gestion.causa }}</textarea>
+    <div class="invalid-feedback">Por favor, describa la causa.</div>
+  </div>
+</div>
+
+
+
+<!-- Validaciones -->
+<div class="mb-3">
+  <label for="validaciones" class="form-label"><strong>Validaciones</strong></label>
+  <textarea class="form-control" id="validaciones" name="validaciones" rows="3" placeholder="Ingrese las validaciones" >{{ gestion.validaciones }}</textarea>
+  <div class="invalid-feedback">Por favor, ingrese las validaciones.</div>
+</div>
+
+
+<!-- Solución -->
+<div class="mb-3">
+  <label for="solucion" class="form-label"><strong>Solución</strong></label>
+  <textarea class="form-control" id="solucion" name="solucion" rows="3" placeholder="Ingrese la solución" >{{ gestion.solucion }}</textarea>
+  <div class="invalid-feedback">Por favor, ingrese la solución.</div>
+</div>
+
+<!-- Responsable GIOTI -->
+<div class="mb-3">
+  <label for="responsable_gioti" class="form-label"><strong>Responsable COES</strong></label>
+  <input type="text" class="form-control" id="responsable_gioti" name="responsable_gioti" value="{{ gestion.responsable_gioti }} -- {{ user }}" readonly>
+  <div class="invalid-feedback">Por favor, ingrese el responsable GIOTI.</div>
+</div>
+
+<!-- Fecha y Hora Inicial -->
+<div class="mb-3">
+  <label for="fecha_hora_inicial" class="form-label"><strong>Fecha y Hora Inicial</strong></label>
+  <input type="datetime-local" class="form-control d-inline w-auto me-3" id="fecha_hora_inicial" name="fecha_hora_inicial" value="{{ gestion.fecha_hora_inicial|date:'Y-m-d\TH:i' }}" >
+  <label for="fecha_hora_final" class="form-label"><strong>Fecha y Hora Final</strong></label>
+  <input type="datetime-local" class="form-control d-inline w-auto" id="fecha_hora_final" name="fecha_hora_final" value="{{ gestion.fecha_hora_final|date:'Y-m-d\TH:i' }}" {% if not gestion.fecha_hora_final %} placeholder="None" {% endif %}>
+  <div class="invalid-feedback">Por favor, ingrese la fecha y hora inicial.</div>
+</div>
+
+
+
+
+<!-- Checkbox GIOTI -->
+<div class="mb-3">
+  <label class="form-label"><strong>GIOTI</strong></label>
+  <div>
+    <input type="checkbox" id="gioti" name="gioti" class="checkbox-grande" {% if gestion.gioti %} checked {% endif %}>
+    <label for="gioti">Sí</label>
+  </div>
+</div>
+      <!-- Botón de Enviar -->
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}
+

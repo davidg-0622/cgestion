@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reporte CGM</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid black; padding: 8px; text-align: center; }
+        th { background-color: #343a40; color: white; }
+        td { white-space: pre-wrap; } /* This will preserve whitespace and line breaks */
+    </style>
+</head>
+<body>
+    {% for gestion in gestiones %}
+    <p>Se creao la gestion con el servicio {{ gestion.servicio }} y numero de {{ gestion.numero_caso }}</p>
+    {% endfor %}
+    <table>
+        <thead>
+            <tr>
+                <th>Servicio</th>
+                <th>Número Caso</th>
+                <th>Detalle</th>
+                <th>tipo_de_falla</th>
+                <th>causa</th>
+                <th>validaciones</th>
+                <th>Solución</th>
+                <th>Fecha y Hora Inicial</th>
+                <th>Fecha y Hora Final</th>
+                <th>Responsables</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for gestion in gestiones %}
+            <tr>
+                <td>{{ gestion.servicio }}</td>
+                <td>{{ gestion.numero_caso }}</td>
+                <td>{{ gestion.detalle }}</td>
+                <td>{{ gestion.tipo_de_falla }}</td>
+                <td>{{ gestion.causa }}</td>
+                <td>{{ gestion.validaciones }}</td>
+                <td>{{ gestion.solucion }}</td>
+                <td>{{ gestion.fecha_hora_inicial }}</td>
+                <td>{{ gestion.fecha_hora_final }}</td>
+                <td>{{ gestion.responsable_gioti }}</td>
+                <!-- <td>{% if gestion.gioti %}✔{% else %}✘{% endif %}</td> -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

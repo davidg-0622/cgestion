@@ -1,0 +1,124 @@
+{% load static %}
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+
+<head>
+  <script src="{% static 'js/color-modes.js' %}"></script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.122.0">
+  <title>{% block title %}Cgestion{% endblock %}</title>
+
+
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+  
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <!-- Estilo CSS del proyecto -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+
+
+
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+    <symbol id="bootstrap" viewBox="0 0 118 94">
+      <title>Bootstrap</title>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="..." />
+    </symbol>
+  </svg>
+
+  <main class="d-flex flex-column flex-md-row">
+    <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px;">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        
+        <svg class="bi pe-none me-2" width="40" height="32">
+          <use xlink:href="#bootstrap" />
+        </svg>
+        <span class="fs-4">CGESTION</span>
+      </a>
+      <hr>
+
+      <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+          <a href="/" class="nav-link text-white" aria-current="page">
+            <svg class="bi pe-none me-2" width="16" height="16">
+              <use xlink:href="#home" />
+            </svg>
+            <i class="fa-solid fa-house"></i>  Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/" class="nav-link text-white" aria-current="page">
+            <svg class="bi pe-none me-2" width="16" height="16">
+              <use xlink:href="#gestiones" />
+            </svg>
+            <i class="fa-solid fa-folder-open"></i>  Gestiones
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white" href="#" id="mejorasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <svg class="bi pe-none me-2" width="16" height="16">
+                  <use xlink:href="#mejoras_CGM" />
+              </svg>
+              <i class="fa-solid fa-arrow-up-right-dots"></i> Mejoras CGM
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="mejorasDropdown">
+            <li><a class="dropdown-item" href="{% url 'listar_mejora' %}">Listar Mejora</a></li>
+              <li><a class="dropdown-item" href="{% url 'crear_mejora' %}">Crear Mejora</a></li>
+              <li><a class="dropdown-item" href="{% url 'listar_mejoras_cerradas' %}">Mejoras cerradas</a></li>
+
+             
+          </ul>
+      </li>
+      
+      </ul>
+      <hr>
+      <div class="dropdown">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="{% static 'images/logo.JPG' %}" alt="" width="32" height="32" class="rounded-circle me-2">
+          <strong>{{ user }}</strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+          <li><a class="dropdown-item" href="/login">Cerrar sesión</a></li>
+          <li><a class="dropdown-item" href="{% url 'cambiar_contrasena' %}">Cambiar contraseña</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="b-example-divider b-example-vr"></div>
+
+    <!-- Contenedor principal para el contenido -->
+    <div id="content" class="flex-grow-1">
+      {% block content %}
+      {% endblock %}
+    </div>
+
+   
+
+
+  </main>
+
+
+</body>
+  
+<div class="content">
+  <!-- Aquí va el contenido de tu página -->
+</div>
+
+
+
+
+<script src="{% static 'js/control_fecha.js' %}"></script>
+
+</html>
