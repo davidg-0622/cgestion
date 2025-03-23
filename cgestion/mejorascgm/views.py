@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 import csv
 import openpyxl
 from django.http import HttpResponse
+from django.contrib import admin
 
 
 
@@ -339,3 +340,57 @@ def descargar_mejora(request):
             # Si el formato no es válido, devolver un error
             messages.error(request, "Formato no soportado")
             return redirect('listar_mejora')
+
+
+
+
+
+################################# exportar a csv desde admin #######################################
+import csv
+from django.http import HttpResponse
+from django.contrib import admin
+from .models import Mejoracgm  # Asegúrate de importar tu modelo correcto
+
+class TuModeloAdmin(admin.ModelAdmin):
+    list_display = ("id", "servicio", "herramienta_de_monitoreo", "tipo_de_mejora", 'numero_peticion', 'numero_wo',
+                    'servidor', 'variable', 'peticion_reincidente', 'peticion_anterior', 'observaciones', 
+                    'fecha_hora_mejora', 'area_responsable', 'mejora_creada_por', 'estado', 'solucion', 'fecha_hora')
+    actions = ["exportar_csv"]
+
+    def exportar_csv(self, request, queryset):
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="datos.csv"'
+        
+        writer = csv.writer(response)
+        writer.writerow(["ID", "Servicio", "Herramienta de Monitoreo", "Tipo de Mejora", "Número de Petición",
+                         "Número WO", "Servidor", "Variable", "Petición Reincidente", "Petición Anterior",
+                         "Observaciones", "Fecha y Hora de Mejora", "Área Responsable", "Mejora Creada Por",
+                         "Estado", "Solución", "Fecha Hora"])  # Encabezados
+
+       
+        for obj in queryset:
+            writer.writerow([
+                obj.id,
+                obj.servicio,
+                obj.herramienta_de_monitoreo,
+                obj.tipo_de_mejora,
+                obj.numero_peticion,
+                obj.numero_wo,
+                obj.servidor,
+                obj.variable,
+                obj.peticion_reincidente,
+                obj.peticion_anterior,
+                obj.observaciones,
+                obj.fecha_hora_mejora,
+                obj.area_responsable,
+                obj.mejora_creada_por,
+                obj.estado,
+                obj.solucion,
+                obj.fecha_hora
+            ])
+
+        return response
+    
+    exportar_csv.short_description = "Exportar a CSV"
+
+

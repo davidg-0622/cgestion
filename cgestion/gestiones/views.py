@@ -26,6 +26,7 @@ from django.utils.timezone import now, localtime
 from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash
 from .forms import ChangePasswordForm
+from django.contrib import admin
 
 
 ############################## Crear gestion #######################################
@@ -499,7 +500,55 @@ def perfil(request):
     return render(request, "users/login.html")
 
 
+########################Descargar desde el panel de administrador ####################
 
+
+
+class TuModeloAdmin(admin.ModelAdmin):
+    list_display = ("servicio", "tipo_de_gestion", "numero_caso", 'detectada_por', 'causado_por_certificado_digital',
+                    'incidente_generado_por_OC', 'atribuible_a', 'tipo_de_falla', 'detalle', 'tipo_causa', 'causa', 'validaciones',
+                    'solucion', 'responsable_gioti', 'fecha_hora_inicial', 'fecha_hora_final', 'postular_amg', 'gioti' 
+                    )  # Ajusta con los campos de tu modelo
+    actions = ["exportar_csv"]
+
+    def exportar_csv(self, request, queryset):
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="datos.csv"'
+        
+        writer = csv.writer(response)
+        writer.writerow(["ID", "Servicio", "Tipo de Gestión", "Número de Caso", "Detectada Por",
+            "Causado por Certificado Digital", "Incidente Generado por OC", "Atribuible A",
+            "Tipo de Falla", "Detalle", "Tipo de Causa", "Causa", "Validaciones",
+            "Solución", "Responsable GIOTI", "Fecha Hora Inicial", "Fecha Hora Final",
+            "Postular AMG", "GIOTI"])  # Encabezados
+
+        for obj in queryset:
+            fecha_hora_inicial = obj.fecha_hora_inicial.replace(tzinfo=None) if obj.fecha_hora_inicial else None
+            fecha_hora_final = obj.fecha_hora_final.replace(tzinfo=None) if obj.fecha_hora_final else None
+
+            writer.writerow([obj.id,
+                obj.servicio,
+                obj.tipo_de_gestion,
+                obj.numero_caso,
+                obj.detectada_por,
+                obj.causado_por_certificado_digital,
+                obj.incidente_generado_por_OC,
+                obj.atribuible_a,
+                obj.tipo_de_falla,
+                obj.detalle,
+                obj.tipo_causa,
+                obj.causa,
+                obj.validaciones,
+                obj.solucion,
+                obj.responsable_gioti,
+                fecha_hora_inicial,
+                fecha_hora_final,
+                obj.postular_amg,
+                obj.gioti])
+
+        return response
+    
+    exportar_csv.short_description = "Exportar a CSV"
 
 
 
