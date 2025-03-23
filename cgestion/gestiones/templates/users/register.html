@@ -1,5 +1,5 @@
 {% load static %}
-
+<title>{% block title %}Registrar Usuario{% endblock %}</title>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -86,6 +86,9 @@
 
             <button type="submit" class="btn btn-primary w-100">Registrarse</button>
         </form>
+        <div class="text-center mt-3">
+            <p class="small">¿Ya tienes usuario? <a href="{% url 'login' %}">Login</a></p>
+        </div>
         
         {% if messages %}
         {% for message in messages %}

@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% load static %}
+<title>{% block title %}Listar Gestiones{% endblock %}</title>
 
 {% block content %}
 
@@ -22,7 +23,7 @@
 <br>
 
 
-
+<!-- mensaje de alerta  -->
 {% if messages %}
     {% for message in messages %}
         <div class="alert alert-success" role="alert">
@@ -30,6 +31,9 @@
         </div>
     {% endfor %}
 {% endif %}
+
+
+<!-- Boton de crear gestion  -->
 <br>
 <div class="d-flex justify-content-end">
   <a href="{% url 'creargestion' %}" class="btn btn-success">
@@ -76,17 +80,17 @@
     <table class="table table-striped table-bordered table-hover">
       <thead class="table-dark">
         <tr>
-            <th class="text-center">
+            <th class="text-center align-middle">
             <input type="checkbox" id="select-all" onclick="toggleCheckboxes(this)">
             </th>
-          <th class="text-center">Número Caso</th>
-          <th class="text-center">Servicio</th>
-          <th class="text-center">Detalle</th>
-          <th class="text-center">Solución</th>
-          <th class="text-center">Responsables</th>
-          <th class="text-center">Fecha y Hora Inicial</th>
-          <th class="text-center">Fecha y Hora Final</th>
-          <th class="text-center">GIOTI</th>
+          <th class="text-center align-middle">Número Caso</th>
+          <th class="text-center align-middle">Servicio</th>
+          <th class="text-center align-middle">Detalle</th>
+          <th class="text-center align-middle">Solución</th>
+          <th class="text-center align-middle">Responsables</th>
+          <th class="text-center align-middle">Fecha y Hora Inicial</th>
+          <th class="text-center align-middle">Fecha y Hora Final</th>
+          <th class="text-center align-middle">GIOTI</th>
         </tr>
       </thead>
       <tbody>

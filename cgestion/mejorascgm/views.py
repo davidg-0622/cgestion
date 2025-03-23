@@ -9,6 +9,9 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+import csv
+import openpyxl
+from django.http import HttpResponse
 
 
 
@@ -230,3 +233,109 @@ def enviar_mejora_email(request, mejora_id):
         return render(request, 'success.html', {'mensaje': 'Correo enviado correctamente'})
     except Exception as e:
         return render(request, 'error.html', {'mensaje': f'Error al enviar correo: {str(e)}'})
+    
+    
+    
+    
+    ############################## descargar mejoras ######################################
+
+
+@login_required(login_url='/login/')
+def descargar_mejora(request):
+        # Obtener los IDs seleccionados desde el formulario
+        ids_seleccionados = request.GET.getlist("mejoras")
+
+        # Filtrar las gestiones seleccionadas
+        mejoras = Mejoracgm.objects.filter(id__in=ids_seleccionados)
+
+        # Obtener el formato deseado desde la URL, por defecto CSV
+        formato = request.GET.get('formato', 'csv')
+
+        if formato == 'csv':
+            # Crear la respuesta con CSV
+            response = HttpResponse(content_type="text/csv")
+            response["Content-Disposition"] = 'attachment; filename="gestiones_seleccionadas.csv"'
+
+            # Crear un escritor CSV
+            writer = csv.writer(response)
+
+            # Escribir encabezados
+            writer.writerow([
+                "ID", "Servicio", "Herramienta de Monitoreo", "Tipo de Mejora", "Número de Petición",
+                "Número WO", "Servidor", "Variable", "Petición Reincidente", "Petición Anterior",
+                "Observaciones", "Fecha y Hora de Mejora", "Área Responsable", "Mejora Creada Por",
+                "Estado", "Solución"
+            ])
+
+            # Escribir datos de las gestiones seleccionadas
+            for mejora in mejoras:
+                writer.writerow([
+                    mejora.id,
+                    mejora.servicio,
+                    mejora.herramienta_de_monitoreo,
+                    mejora.tipo_de_mejora,
+                    mejora.numero_peticion,
+                    mejora.numero_wo,
+                    mejora.servidor,
+                    mejora.variable,
+                    mejora.peticion_reincidente,
+                    mejora.peticion_anterior,
+                    mejora.observaciones,
+                    mejora.fecha_hora_mejora,
+                    mejora.area_responsable,
+                    mejora.mejora_creada_por,
+                    mejora.estado,
+                    mejora.solucion
+                ])
+
+            return response
+
+        elif formato == 'xlsx':
+            # Crear la respuesta con XLSX
+            response = HttpResponse(
+                content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            response["Content-Disposition"] = 'attachment; filename="gestiones_seleccionadas.xlsx"'
+
+            # Crear un libro de trabajo y una hoja
+            wb = openpyxl.Workbook()
+            ws = wb.active
+            ws.title = "Mejoras"
+
+            # Escribir encabezados
+            ws.append([
+                "ID", "Servicio", "Herramienta de Monitoreo", "Tipo de Mejora", "Número de Petición",
+                "Número WO", "Servidor", "Variable", "Petición Reincidente", "Petición Anterior",
+                "Observaciones", "Fecha y Hora de Mejora", "Área Responsable", "Mejora Creada Por",
+                "Estado", "Solución"
+            ])
+
+            # Escribir datos de las gestiones seleccionadas
+            for mejora in mejoras:
+                ws.append([
+                    mejora.id,
+                    mejora.servicio,
+                    mejora.herramienta_de_monitoreo,
+                    mejora.tipo_de_mejora,
+                    mejora.numero_peticion,
+                    mejora.numero_wo,
+                    mejora.servidor,
+                    mejora.variable,
+                    mejora.peticion_reincidente,
+                    mejora.peticion_anterior,
+                    mejora.observaciones,
+                    mejora.fecha_hora_mejora,
+                    mejora.area_responsable,
+                    mejora.mejora_creada_por,
+                    mejora.estado,
+                    mejora.solucion
+                ])
+
+            # Guardar el archivo en la respuesta
+            wb.save(response)
+
+            return response
+
+        else:
+            # Si el formato no es válido, devolver un error
+            messages.error(request, "Formato no soportado")
+            return redirect('listar_mejora')

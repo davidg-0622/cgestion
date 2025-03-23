@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% load static %}
-
+{% block title %}Listar mejora{% endblock %}
 
 
 {% block content %}
@@ -51,29 +51,39 @@
   <button type="submit" class="btn btn-primary">🔍 Buscar</button>
 </form>
 
+<form method="GET" action="{% url 'descargar_mejora' %}">
+  <div class="d-flex justify-content-between">
+
 <!-- Tabla de gestiones -->
 <div class="table-responsive">
   <table class="table table-striped table-bordered table-hover">
     <thead class="table-dark">
       <tr>
-        <th class="text-center">Servicio</th>
-        <th class="text-center">Herramienta de monitoreo</th>
-        <th class="text-center">Tipo de mejora</th>
-        <th class="text-center">Numero de pedido</th>
-        <th class="text-center">Numero WO</th>
-        <th class="text-center">Servidor</th>
-        <th class="text-center">Variable</th>
-        <th class="text-center">Peticion reincidente</th>
-        <th class="text-center">Peticion anterior</th>
-        <th class="text-center">Observaciones</th>
-        <th class="text-center">fecha_hora_mejora</th>
-        <th class="text-center">Area responsable</th>
-        <th class="text-center">Mejora creada por</th>
+          <th class="text-center align-middle">
+          <input type="checkbox" id="select-all" onclick="toggleCheckboxes(this)">
+          </th>
+        <th class="text-center align-middle">Servicio</th>
+        <th class="text-center align-middle">Herramienta de monitoreo</th>
+        <th class="text-center align-middle">Tipo de mejora</th>
+        <th class="text-center align-middle">Numero de pedido</th>
+        <th class="text-center align-middle">Numero WO</th>
+        <th class="text-center align-middle">Servidor</th>
+        <th class="text-center align-middle">Variable</th>
+        <th class="text-center align-middle">Peticion reincidente</th>
+        <th class="text-center align-middle">Peticion anterior</th>
+        <th class="text-center align-middle">Observaciones</th>
+        <th class="text-center align-middle">fecha_hora_mejora</th>
+        <th class="text-center align-middle">Area responsable</th>
+        <th class="text-center align-middle">Mejora creada por</th>
       </tr>
     </thead>
     <tbody>
       {% for mejora in page_obj %}
       <tr>
+        <td>
+          <!-- Checkbox con el id de la gestión -->
+          <input type="checkbox" name="mejoras" value="{{ mejora.id }}">
+        </td>
         <td>
             <a href="{% url 'editar_mejora' mejora.id %}" style="text-decoration: none;">
                 {{ mejora.servicio }}
@@ -97,7 +107,23 @@
       {% endfor %}
     </tbody>
   </table>
+
+
+  <div>
+    <select name="formato" class="form-control form-control-sm" style="width: auto;">
+      <option value="csv">CSV</option>
+      <option value="xlsx">XLSX</option>
+    </select>
+  </div>
+  
+
+  <!-- Botón de descarga -->
+  <button type="submit" class="btn btn-warning mx-6">
+    📥 Descargar
+  </button>
 </div>
+</div>
+</form>
 
 <!-- Paginación -->
 <nav aria-label="Page navigation">
@@ -125,5 +151,15 @@
     {% endif %}
   </ul>
 </nav>
+
+
+<script>
+  function toggleCheckboxes(source) {
+    checkboxes = document.getElementsByName('mejoras');
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+      checkboxes[i].checked = source.checked;
+    }
+  }
+</script>
 
 {% endblock %}
