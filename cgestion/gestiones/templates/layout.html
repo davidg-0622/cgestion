@@ -81,6 +81,26 @@
              
           </ul>
       </li>
+
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-white" href="#" id="mejorasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <svg class="bi pe-none me-2" width="16" height="16">
+                <use xlink:href="#seguimiento" />
+            </svg>
+            <i class="fas fa-location-arrow"></i> <!-- Icono de seguimiento -->
+            Seguimiento
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="mejorasDropdown">
+          <li><a class="dropdown-item" href="{% url 'grafico_gestiones' %}">Incidentes</a></li>
+            <li><a class="dropdown-item" href="{% url 'grafico_gestiones_eventos' %}">Eventos</a></li>
+            
+
+           
+        </ul>
+    </li>
+
+
       
       </ul>
       <hr>

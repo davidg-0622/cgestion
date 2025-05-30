@@ -33,7 +33,9 @@ from django.contrib import admin
 
 @login_required(login_url='/login/')
 def creargestion(request):
+     # Obtener el nombre del usuario autenticado (o "Invitado" si no está autenticado)
     first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
+    last_name = request.user.last_name if request.user.is_authenticated else ""
 
     fecha_hora_mejora = timezone.now()  # Obtiene la fecha y hora actual
 
@@ -89,7 +91,7 @@ def creargestion(request):
 
         return redirect("/")  # Redirigir a una página de listado o detalle
 
-    return render(request, "crear_gestion.html", {"first_name": first_name, "fecha_hora_mejora": fecha_hora_mejora})
+    return render(request, "crear_gestion.html", {"first_name": first_name, "last_name": last_name, "fecha_hora_mejora": fecha_hora_mejora})
 
 
 ################################# listar gestion #######################################
@@ -160,8 +162,19 @@ def listar_gestiones(request):
 def editar_gestion(request, id):
     # Obtener el nombre del usuario autenticado (o "Invitado" si no está autenticado)
     first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
-    # Obtiene la instancia de la gestión a editar
-    gestion = get_object_or_404(Gestion, id=id)
+    last_name = request.user.last_name if request.user.is_authenticated else ""
+
+    # Verificar si la gestión ya existe
+    gestion = Gestion.objects.filter(id=id).first()
+    if not gestion:
+        # Si no existe, obtener la instancia de la gestión a editar
+        gestion = get_object_or_404(Gestion, id=id)
+
+    # Verificar si el usuario ya está en responsable_gioti
+    if gestion.responsable_gioti and first_name not in gestion.responsable_gioti:
+        responsable_gioti = f"{gestion.responsable_gioti} -- {first_name} {last_name}"
+    else:
+        responsable_gioti = gestion.responsable_gioti  # No lo repite
 
     # Obtener la fecha y hora actuales
     fecha_hora_actual = datetime.now().strftime('%Y-%m-%dT%H:%M')
@@ -210,17 +223,20 @@ def editar_gestion(request, id):
         # Guarda los cambios en la base de datos
         gestion.save()
 
-        # Crear mensaje flas (sesion que solo se muestra una vez)
-        # Crear mensaje flash (sesión que solo se muestra una vez)
-        # Crear mensaje flash (sesión que solo se muestra una vez)
+        # Crear mensaje flash
         messages.success(
-            request, f'Se ha editado correctamente la gestión con el incidente {gestion.numero_caso} y el servicio {gestion.servicio}.')
+            request, f'Se ha editado correctamente la gestión con el incidente {gestion.numero_caso} y el servicio {gestion.servicio}.'
+        )
 
         # Redirige a la página de gestiones
-        # Asume que 'listar_gestiones' es el nombre de la URL de gestiones.html
         return redirect('listar_gestiones')
 
-    return render(request, 'editar_gestion.html', {'gestion': gestion, "first_name": first_name, 'fecha_hora_actual': fecha_hora_actual})
+    return render(request, 'editar_gestion.html', {
+        'gestion': gestion,
+        "first_name": first_name,
+        'fecha_hora_actual': fecha_hora_actual,
+        'responsable_gioti': responsable_gioti
+    })
 
 
 #################
@@ -566,29 +582,71 @@ class TuModeloAdmin(admin.ModelAdmin):
 
 
 
-###########################################################################
-####################### crear grafico con la data gestion ##########################
+############################  Grafico  incidentes Gioti ###############################
+from collections import Counter
+import io
+import base64
+import pandas as pd
+import matplotlib
+matplotlib.use('Agg')  # Cambiar el backend antes de usar matplotlib
+import matplotlib.pyplot as plt
+import seaborn as sns 
+from django.shortcuts import render
+from django.db.models import Q
+from django.http import HttpResponse
+from .models import Gestion  # Asegúrate de importar tu modelo
+from datetime import datetime, timedelta
+
 
 def grafico_gestiones(request):
-    # Obtener los datos agrupados por responsable_gioti
-    gestiones = Gestion.objects.values('responsable_gioti').annotate(
-        total_casos=Count('numero_caso'))
+    first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
 
-    # Convertir a DataFrame
-    df = pd.DataFrame(list(gestiones))
+    # Obtener parámetros de fecha desde el formulario y convertirlos a datetime
+    fecha_inicio_str = request.GET.get('fecha_inicio')
+    fecha_fin_str = request.GET.get('fecha_fin')
 
-    # Verificar si hay datos
+    fecha_inicio = fecha_fin = None  # Inicializar fechas
+
+    if fecha_inicio_str and fecha_fin_str:
+        try:
+            fecha_inicio = datetime.strptime(fecha_inicio_str, "%Y-%m-%d")
+            fecha_fin = datetime.strptime(fecha_fin_str, "%Y-%m-%d")
+            fecha_fin = fecha_fin.replace(hour=23, minute=59, second=59)  # Asegurar que la fecha fin cubra todo el día
+        except ValueError:
+            fecha_inicio = fecha_fin = None  # En caso de error, evitar filtro inválido
+
+    # Filtro base (solo incidentes)
+    filtro = Q(tipo_de_gestion="Incidente") & Q(gioti=True)
+
+    # Aplicar filtro de fechas si están presentes
+    if fecha_inicio and fecha_fin:
+        filtro &= Q(fecha_hora_inicial__gte=fecha_inicio, fecha_hora_inicial__lte=fecha_fin)
+
+    # Obtener valores filtrados
+    gestiones = Gestion.objects.filter(filtro).values_list('responsable_gioti', flat=True)
+
+    # Contador para cada responsable individual
+    contador_responsables = Counter()
+    for gestion in gestiones:
+        if gestion:
+            responsables = [r.strip() for r in gestion.split('--')]  
+            contador_responsables.update(responsables)
+
+    # Convertir datos en DataFrame
+    df = pd.DataFrame(contador_responsables.items(), columns=['responsable_gioti', 'total_casos'])
+
+    # Si no hay datos, agregar una fila con "Sin datos"
     if df.empty:
-        return HttpResponse("No hay datos para mostrar el gráfico.")
+        df = pd.DataFrame({'responsable_gioti': ['Sin datos'], 'total_casos': [0]})
 
     # Crear el gráfico
-    plt.figure(figsize=(10, 5))
-    sns.barplot(x='responsable_gioti', y='total_casos',
-                data=df, palette='Blues_r')
-    plt.title('Cantidad de Casos por Responsable GIOTI')
-    plt.xlabel('Responsable GIOTI')
-    plt.ylabel('Número de Casos')
-    plt.xticks(rotation=45)
+    plt.figure(figsize=(12, 6))
+    sns.barplot(x='responsable_gioti', y='total_casos', data=df, palette='viridis')
+    plt.title('Cantidad de Casos por Responsable COES', fontsize=12)
+    plt.xlabel('Responsable COES', fontsize=10)
+    plt.ylabel('Número de Casos', fontsize=10)
+    plt.xticks(rotation=45, ha='right', fontsize=10)
+    plt.tight_layout()
 
     # Guardar el gráfico en memoria
     buffer = io.BytesIO()
@@ -600,4 +658,164 @@ def grafico_gestiones(request):
     image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
     buffer.close()
 
-    return HttpResponse(f'<img src="data:image/png;base64,{image_base64}" />')
+    # Convertir el DataFrame en una lista de diccionarios
+    data = df.to_dict(orient='records')
+
+    return render(request, 'grafico_gestiones.html', {
+        'first_name': first_name,
+        'image_base64': image_base64,
+        'data': data,
+        'fecha_inicio': fecha_inicio_str,
+        'fecha_fin': fecha_fin_str,
+    })
+    
+    
+    
+    
+    #################################Grafica incidentes sin gioti##########################
+def grafico_gestiones_no_gioti(request):
+    first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
+
+    # Obtener parámetros de fecha desde el formulario y convertirlos a datetime
+    fecha_inicio_str = request.GET.get('fecha_inicio')
+    fecha_fin_str = request.GET.get('fecha_fin')
+
+    fecha_inicio = fecha_fin = None  # Inicializar fechas
+
+    if fecha_inicio_str and fecha_fin_str:
+        try:
+            fecha_inicio = datetime.strptime(fecha_inicio_str, "%Y-%m-%d")
+            fecha_fin = datetime.strptime(fecha_fin_str, "%Y-%m-%d")
+            fecha_fin = fecha_fin.replace(hour=23, minute=59, second=59)  # Asegurar que la fecha fin cubra todo el día
+        except ValueError:
+            fecha_inicio = fecha_fin = None  # En caso de error, evitar filtro inválido
+
+    # Filtro base (solo incidentes)
+    filtro = Q(tipo_de_gestion="Incidente") & Q(gioti=False)
+
+    # Aplicar filtro de fechas si están presentes
+    if fecha_inicio and fecha_fin:
+        filtro &= Q(fecha_hora_inicial__gte=fecha_inicio, fecha_hora_inicial__lte=fecha_fin)
+
+    # Obtener valores filtrados
+    gestiones = Gestion.objects.filter(filtro).values_list('responsable_gioti', flat=True)
+
+    # Contador para cada responsable individual
+    contador_responsables = Counter()
+    for gestion in gestiones:
+        if gestion:
+            responsables = [r.strip() for r in gestion.split('--')]  
+            contador_responsables.update(responsables)
+
+    # Convertir datos en DataFrame
+    df = pd.DataFrame(contador_responsables.items(), columns=['responsable_gioti', 'total_casos'])
+
+    # Si no hay datos, agregar una fila con "Sin datos"
+    if df.empty:
+        df = pd.DataFrame({'responsable_gioti': ['Sin datos'], 'total_casos': [0]})
+
+    # Crear el gráfico
+    plt.figure(figsize=(12, 6))
+    sns.barplot(x='responsable_gioti', y='total_casos', data=df, palette='viridis')
+    plt.title('Cantidad de Casos por Responsable COES', fontsize=12)
+    plt.xlabel('Responsable COES', fontsize=10)
+    plt.ylabel('Número de Casos', fontsize=10)
+    plt.xticks(rotation=45, ha='right', fontsize=10)
+    plt.tight_layout()
+
+    # Guardar el gráfico en memoria
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plt.close()
+
+    # Convertir la imagen a base64
+    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    buffer.close()
+
+    # Convertir el DataFrame en una lista de diccionarios
+    data = df.to_dict(orient='records')
+
+    return render(request, 'grafico_gestiones_no_gioti.html', {
+        'first_name': first_name,
+        'image_base64': image_base64,
+        'data': data,
+        'fecha_inicio': fecha_inicio_str,
+        'fecha_fin': fecha_fin_str,
+    })
+    
+    
+    ##############################grafico eventos##################
+    
+def grafico_gestiones_eventos(request):
+    
+    first_name = request.user.first_name if request.user.is_authenticated else "Invitado"
+
+    # Obtener parámetros de fecha desde el formulario y convertirlos a datetime
+    fecha_inicio_str = request.GET.get('fecha_inicio')
+    fecha_fin_str = request.GET.get('fecha_fin')
+
+    fecha_inicio = fecha_fin = None  # Inicializar fechas
+
+    if fecha_inicio_str and fecha_fin_str:
+        try:
+            fecha_inicio = datetime.strptime(fecha_inicio_str, "%Y-%m-%d")
+            fecha_fin = datetime.strptime(fecha_fin_str, "%Y-%m-%d")
+            fecha_fin = fecha_fin.replace(hour=23, minute=59, second=59)  # Asegurar que la fecha fin cubra todo el día
+        except ValueError:
+            fecha_inicio = fecha_fin = None  # En caso de error, evitar filtro inválido
+
+    # Filtro base (solo incidentes)
+    filtro = Q(tipo_de_gestion="Evento")
+
+    # Aplicar filtro de fechas si están presentes
+    if fecha_inicio and fecha_fin:
+        filtro &= Q(fecha_hora_inicial__gte=fecha_inicio, fecha_hora_inicial__lte=fecha_fin)
+
+    # Obtener valores filtrados
+    gestiones = Gestion.objects.filter(filtro).values_list('responsable_gioti', flat=True)
+
+    # Contador para cada responsable individual
+    contador_responsables = Counter()
+    for gestion in gestiones:
+        if gestion:
+            responsables = [r.strip() for r in gestion.split('--')]  
+            contador_responsables.update(responsables)
+
+    # Convertir datos en DataFrame
+    df = pd.DataFrame(contador_responsables.items(), columns=['responsable_gioti', 'total_casos'])
+
+    # Si no hay datos, agregar una fila con "Sin datos"
+    if df.empty:
+        df = pd.DataFrame({'responsable_gioti': ['Sin datos'], 'total_casos': [0]})
+
+    # Crear el gráfico
+    plt.figure(figsize=(12, 6))
+    sns.barplot(x='responsable_gioti', y='total_casos', data=df, palette='coolwarm')
+    plt.title('Cantidad de Casos por Responsable COES', fontsize=12)
+    plt.xlabel('Responsable COES', fontsize=10)
+    plt.ylabel('Número de Eventos', fontsize=10)
+    plt.xticks(rotation=45, ha='right', fontsize=10)
+    plt.tight_layout()
+
+    # Guardar el gráfico en memoria
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plt.close()
+
+    # Convertir la imagen a base64
+    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    buffer.close()
+
+    # Convertir el DataFrame en una lista de diccionarios
+    data = df.to_dict(orient='records')
+
+    return render(request, 'grafico_gestiones_eventos.html', {
+        'first_name': first_name,
+        'image_base64': image_base64,
+        'data': data,
+        'fecha_inicio': fecha_inicio_str,
+        'fecha_fin': fecha_fin_str,
+    })
+

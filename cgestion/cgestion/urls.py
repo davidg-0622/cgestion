@@ -32,6 +32,10 @@ urlpatterns = [
     path('descargar_gestiones/', views.descargar_gestiones, name='descargar_gestiones'),
     path('listar_gestiones_en_investigacion/', views.listar_gestiones_en_investigacion, name='listar_gestiones_en_investigacion'),
     path('grafico/', views.grafico_gestiones, name='grafico_gestiones'),
+    path('grafico_gestiones_eventos/', views.grafico_gestiones_eventos, name='grafico_gestiones_eventos'),
+    path('grafico_gestiones_no_gioti/', views.grafico_gestiones_no_gioti, name='grafico_gestiones_no_gioti'),
+    
+    
     path("cambiar-contrasena/", views.change_password, name="cambiar_contrasena"),
     path("perfil/", views.perfil, name="perfil"),
 
